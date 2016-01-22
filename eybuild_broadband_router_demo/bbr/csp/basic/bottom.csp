@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<TITLE>bottom</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<STYLE type=text/css> <!--
+td { font-size: 10pt;  text-align: center; color: #000066}
+a:link {color: #000066; text-decoration: none} 
+a:visited {color: #000066; text-decoration: none}
+a:hover {color: #FF0000; text-decoration: underline} 
+a:active {color: #000066; text-decoration: underline}
+--></STYLE>
+</HEAD>
+<BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0>
+<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%">
+  <TBODY>
+    <TR><TD bgColor=#173A7E height=2 width="100%"></TD></TR>
+    <TR>
+      <TD bgColor=#FFCC66 height=20 width="100%">
+      	<A href="http://www.eybuild.com" target=_blank>C 开发 CGI 首选 CSP/eybuild</a> | 
+      	<A href="http://www.eybuild.com" target=_blank>设备 WEB 开发首选 CSP/eybuild</a> |
+      	更多免费: <A href="mailto:eybuild@hotmail.com" target=_blank>eybuild@hotmail.com</a>
+	  </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,74 @@
+<% @include <menu.h> %>
+<HTML>
+<HEAD>
+<TITLE>menu</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<STYLE type=text/css>
+BODY {
+	BACKGROUND-COLOR: #f8c400; FONT-FAMILY: "宋体", "Times New Roman"; FONT-SIZE: 75px; MARGIN-LEFT: 15px; MARGIN-TOP: 15px; WHITE-SPACE: nowrap
+}
+TD.onelevel {
+	FONT-SIZE: 12px; HEIGHT: 18px; LINE-HEIGHT: 18px; PADDING-LEFT: 0px; TEXT-DECORATION: none
+}
+TD.onelevelsp {
+	FONT-SIZE: 12px; HEIGHT: 18px; LINE-HEIGHT: 18px; PADDING-LEFT: 0px; TEXT-DECORATION: none; WHITE-SPACE: nowrap
+}
+TD.twolevel {
+	FONT-SIZE: 12px; HEIGHT: 18px; LINE-HEIGHT: 18px; PADDING-LEFT: 0px; TEXT-DECORATION: none; WHITE-SPACE: nowrap
+}
+A.tp1:visited {
+	COLOR: #333333; FONT-FAMILY: "宋体", "Times New Roman"; TEXT-DECORATION: none; underline: none
+}
+A.tp1:hover {
+	COLOR: #ff0000; CURSOR: hand; FONT-FAMILY: "宋体", "Times New Roman"; TEXT-DECORATION: none
+}
+A.tp1:link {
+	COLOR: #333333; FONT-FAMILY: "宋体", "Times New Roman"; TEXT-DECORATION: none; underline: none
+}
+A.tp2:visited {
+	COLOR: #333333; FONT-FAMILY: "宋体", "Times New Roman"; TEXT-DECORATION: none; underline: none
+}
+A.tp2:hover {
+	COLOR: #ff0000; CURSOR: hand; FONT-FAMILY: "宋体", "Times New Roman"; TEXT-DECORATION: none
+}
+A.tp2:link {
+	COLOR: #333333; FONT-FAMILY: "宋体", "Times New Roman"; TEXT-DECORATION: none; underline: none
+}
+</STYLE>
+<SCRIPT language=javascript><!--
+function Click() { 
+    window.event.returnValue = true;
+}
+function ResetStatus(strInfo) {
+    window.status=""; 
+    return true;
+}
+
+document.oncontextmenu=Click;
+	
+function OnHrefClick(mainID,subID) {	//主菜单和子菜单index
+	if(mainID==null)  mainID='A';
+	if(subID==null)  subID=0;
+	var MenuHtml ='<% =cgiPrefix(NULL) %>/menu.csp' + 
+	    '&MainID=' + mainID + '&SubID=' + subID;
+	window.location.href =MenuHtml;
+	return false;  
+}
+
+var MainFrameHtml  ='<% menu_get_page(__ebfp, getParameter("MainID"), getParameter("SubID")); %>';
+if (null != parent && parent.mainFrame)
+    parent.mainFrame.location.href=MainFrameHtml;
+--></SCRIPT>
+<META content="MSHTML 5.00.3700.6699" name=GENERATOR>
+</HEAD>
+<BODY>
+<TABLE border=0 width=124>
+  <TBODY>
+    <% menu_update(__ebfp, getParameter("MainID"), getParameter("SubID")); %>
+  </TBODY>
+</TABLE>
+</BODY>
+</HTML>
+

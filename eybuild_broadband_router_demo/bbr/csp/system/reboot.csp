@@ -1,0 +1,97 @@
+<% @g
+#ifdef VXWORKS
+static int vx_reboot(int code)
+{
+	taskDelay(30);
+	reboot(0);
+}
+#endif /* VXWORKS */
+%>
+
+<% @b 
+	@include <webhandle.h>
+	
+	/* load first */
+	if (!isblankstr(G("Reboot"))) {
+#ifdef VXWORKS	
+		{extern int vx_reboot(int); 
+		taskSpawn("vx_reboot", 1, 0, 10000, (FUNCPTR)vx_reboot, 
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		}
+#endif
+	}
+%>
+<HTML>
+<HEAD>
+<TITLE>backup</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doSubmit(){
+if(confirm("确认重新启动路由器？")){
+/* location.href = "/userRpm/SysRebootRpm.htm"; */
+return true;}
+else {return false;}}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD class=title vAlign=center align=left width=495>重启路由器</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE class=space cellSpacing=0 cellPadding=0 width=410 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>单击此按钮将使路由器重新启动。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=410 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD width=326><INPUT class=button id=reboot type=submit value=重启路由器 name=Reboot>
+                          </TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;</TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

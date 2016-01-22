@@ -1,0 +1,232 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		BUFCPY(bbr->wan.wan_type, G("wantype"));
+		BUFCPY(bbr->wan.account, G("acc"));
+		BUFCPY(bbr->wan.password, G("psw"));
+		BUFCPY(bbr->wan.connect_mode, G("linktype"));
+		if ( !strcmp(bbr->wan.connect_mode, "1") )
+			bbr->wan.auto_wait_time = atoi(G("waittime"));
+		if ( !strcmp(bbr->wan.connect_mode, "4") )
+			bbr->wan.manual_wait_time = atoi(G("waittime2"));
+		
+		save_bbr(bbr, errmsg);
+	}
+%>
+
+<HTML>
+<HEAD>
+<TITLE>pppoecfg</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" type=text/JavaScript></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="http://<% =getServerAddr() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doPrev(){history.go(-1);}
+function doSubmit(){
+	if(document.forms[0].linktype[0].checked){
+		if(!is_number(document.forms[0].waittime.value,0,99)){
+			alert("时间输入错误，请重新输入（0－99）！");
+			
+			var element =document.forms[0].waittime;
+			if(element){element.focus();element.select();}
+			return false;
+		}	
+	}
+	if(document.forms[0].linktype[2].checked){
+		if(!is_number(document.forms[0].waittime2.value,0,99)){
+			alert("时间输入错误，请重新输入（0－99）！");
+			var element =document.forms[0].waittime2;
+			if(element){element.focus();element.select();}
+				return false;
+		}
+	}
+	return true;
+}
+
+function doAdvance(){location.href="<% =cgiPrefix(NULL) %>/network/pppoe_more.csp"}
+function doSelect(){
+	if(document.forms[0].linktype[0].checked)
+		document.forms[0].waittime.disabled = false;
+	else
+		{document.forms[0].waittime.disabled = true;}
+
+	if(document.forms[0].linktype[2].checked)
+		document.forms[0].waittime2.disabled = false;
+	else
+		{document.forms[0].waittime2.disabled = true;}
+		
+	return true;
+}
+
+function doLoad(){
+	if(document.forms[0].linktype[0].checked)
+		document.forms[0].waittime.disabled = false;
+	else{document.forms[0].waittime.disabled = true;}
+	
+	if(document.forms[0].linktype[2].checked)
+		document.forms[0].waittime2.disabled = false;
+	else{document.forms[0].waittime2.disabled = true;}
+	
+	return true;
+}
+
+function doChange(){
+	return false;
+<% #if 0 %>
+	var n = document.forms[0].wantype.selectedIndex;
+	if(document.forms[0].wantype.selectedIndex == 0){
+		location.href = "<% =thisCgiPrefix() %>";
+	}
+	if(document.forms[0].wantype.selectedIndex == 1){
+		location.href = "<% =thisCgiPrefix() %>";
+	}
+	if(document.forms[0].wantype.selectedIndex == 2){
+		location.href = "<% =thisCgiPrefix() %>";
+	}
+<% #endif %>
+}
+//--></SCRIPT>
+</HEAD>
+<BODY onload=doLoad();>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD align=left class=title vAlign=center width=495>WAN口设置</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=460>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置路由器WAN口的基本网络参数。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=460>
+                      <TBODY>
+                        <TR>
+                          <TD width=111>WAN口连接类型：</TD>
+                          <TD width=285>
+                          <% SELECT_BEGIN("wantype", bbr->wan.wan_type, "class=list onchange=doChange()") %>
+                              <% OPTIONS_ADD(WAN_TYPE_DYNAMIC_IP, "动态IP") %>
+                              <% OPTIONS_ADD(WAN_TYPE_STATIC_IP, "静态IP") %>
+                              <% OPTIONS_ADD(WAN_TYPE_PPPOE, "PPPoE") %>
+                          <% SELECT_END() %>
+						  </TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 width=460>
+                      <TBODY>
+                        <TR>
+                        <TR>
+                          <TD width=107>上网账号：</TD>
+                          <TD width=289><INPUT class=text id=acc maxLength=118 name=acc 
+                  size=25 value="<% =bbr->wan.account %>"></TD>
+                        </TR>
+                        <TR>
+                          <TD>上网口令：</TD>
+                          <TD><INPUT class=text id=psw maxLength=118 name=psw size=25 
+                  type=password value="<% =bbr->wan.password %>"></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=460>
+                      <TBODY>
+                        <TR>
+                          <TD colSpan=2>根据您的需要，请选择对应连接模式：</TD>
+                        </TR>	
+                        <TR>
+                          <TD colSpan=2>
+                          	<% RADIO_BOX("linktype", "1", bbr->wan.connect_mode, "onclick=doSelect();"); %>
+                            按需连接，在有访问数据时自动进行连接。</TD>
+                        </TR>
+                        <TR>
+                          <TD width=27>&nbsp;</TD>
+                          <TD width=373>自动断线等待时间：
+                            <INPUT class=text id=waittime maxLength=2 name=waittime size=2 
+                              value="<% =$bbr->wan.auto_wait_time %>">
+                            分钟 （0表示不自动断线）</TD>
+                        </TR>
+                        <TR><% RADIO_BOX("linktype", "2", bbr->wan.connect_mode, "onclick=doSelect();"); %>
+                            自动连接，在开机和断线后自动进行连接。</TD>
+                        </TR>
+                        <TR>
+                          <TD colSpan=2>
+                          	<% RADIO_BOX("linktype", "4", bbr->wan.connect_mode, "onclick=doSelect();"); %>
+                            手动连接，由用户手动进行连接。</TD>
+                        </TR>
+                        <TR>
+                          <TD>&nbsp;</TD>
+                          <TD>自动断线等待时间：
+                            <INPUT class=text id=waittime2 maxLength=2 name=waittime2 size=2 
+                              value="<% =$bbr->wan.manual_wait_time %>">
+                            分钟 （0表示不自动断线）</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD><INPUT class=button disabled id=connect2 name=Connect type=submit value="连 接">
+&nbsp;
+                            <INPUT class=button id=disconnect2 name=Disconnect type=submit value="断 线"></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=460>
+                      <TBODY>
+                        <TR>
+                          <TD><INPUT class=button name=Advanced onclick=doAdvance(); type=button value=高级设置></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=save name=Save type=submit value="保 存">
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

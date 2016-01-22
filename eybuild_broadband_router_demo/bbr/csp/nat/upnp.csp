@@ -1,0 +1,193 @@
+<HTML>
+<HEAD>
+<TITLE>UPnP</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function lastipverify(lastip,nMin,nMax){
+var c;
+var n = 0;
+var ch = "0123456789";
+if(lastip.length = 0)
+return false;
+for (var i = 0; i < lastip.length; i++){
+c = lastip.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(lastip) < nMin || parseInt(lastip) > nMax)
+return false; return true;}
+function is_lastip(lastip_string,nMin,nMax){
+if(lastip_string.length == 0){
+alert("请输入IP地址（" + nMin + "－" + nMax + "）！");
+return false;}
+if (!lastipverify(lastip_string,nMin,nMax)){
+alert("IP地址输入错误，请重新输入（"+ nMin + "－" + nMax + "）！");
+return false;}
+return true;}
+function macverify(mac_string){
+var c;
+var n = 0;
+var ch = "-0123456789ABCDEFabcdef";
+if (mac_string.length != 17)
+return false;
+for (var i = 0; i < mac_string.length; i++){
+c = mac_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;
+else{
+if (c == '-')
+n++;}}
+if (n != 5)
+return false;
+for(var i = 2; i < 17; i += 3){
+if (mac_string.charAt(i) != '-')
+return false;
+}return true;}
+function is_macaddr(mac_string){
+if(mac_string.length == 0){
+alert("请输入MAC地址！");
+return false;}
+if (!macverify(mac_string)){
+alert("MAC地址输入错误，请重新输入！");
+return false;}return true;}
+function portverify(port_string){
+var c;
+var ch = "0123456789";
+if(port_string.length == 0)
+return false;
+for (var i = 0; i < port_string.length; i++){
+c = port_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(port_string) <= 0 || parseInt(port_string) >= 65535)
+return false;return true;}
+function is_port(port_string){
+if(port_string.length == 0){
+alert("请输入端口地址（1－65534）！");
+return false;}
+if (!portverify(port_string)){
+alert("端口地址输入错误，请重新输入（1－65534）！");
+return false;}
+return true;}
+function is_number(num_string,nMin,nMax){
+var c;
+var ch = "0123456789";
+for (var i = 0; i < num_string.length; i++){
+c = num_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if(parseInt(num_string) < nMin || parseInt(num_string) > nMax)
+return false;return true;}
+function is_domain(domain_string){
+var c;
+var ch = "-.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+for (var i = 0; i < domain_string.length; i++){
+c = domain_string.charAt(i);
+if (ch.indexOf(c) == -1){
+alert("输入中含有非法字符，请重新输入！");
+return false;}}return true;}
+function doHelp(){alert("请输入正确的帮助信息！");}
+function doRefresh() {location.href="<% =thisCgiPrefix() %>"}
+var maxEntry = 0;
+var delParas = new Array(0);
+for (n = 0; n < delParas.length; n ++)
+delParas[n] = 0;
+function changeDelPara(para){ if ((para < 0) || (para >= maxEntry)) return;delParas[(para >> 5)] ^= 1 << (para & (32 - 1)); //alert('delParas['+(para >> 5)+'] = '+delParas[(para >> 5)]);
+}
+function doUPnPDel(){var paras = '';
+ for (n = delParas.length; 0 != n; n --)
+paras+=delParas[n - 1]+',';//alert(paras);
+location.href="/userRpm/UpnpCfgRpm.htm?DelUPnP="+paras}
+function doUPnPClearAll(){
+if(confirm("确认要删除所有UPnP条目? ")){for (n = 0; n < maxEntry; n ++)
+delParas[(n >> 5)] |= 1 << (n & (32 - 1));
+doUPnPDel();
+}}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=560>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+width=7></TD>
+          <TD align=left class=title vAlign=center width=553>UPnP设置</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=560>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=558><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=514>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置/显示UPnP的设置以及工作状态。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=514>
+                      <TBODY>
+                        <TR>
+                          <TD>当前UPnP状态：<B>已关闭</B>&nbsp;&nbsp;
+                            <INPUT class=button name=ENUPnP disabled type=submit value=启用UPnP></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <DIV align=center><BR align="center">
+                      当前UPnP设置列表
+                      <TABLE align=center border=1 cellPadding=0 cellSpacing=0 
+              width=514>
+                        <TBODY>
+                          <TR>
+                            <TD align=middle>ID</TD>
+                            <TD align=middle>应用描述</TD>
+                            <TD align=middle>外部端口</TD>
+                            <TD align=middle>协议类型</TD>
+                            <TD align=middle>内部端口</TD>
+                            <TD align=middle>IP地址</TD>
+                            <TD align=middle>状态</TD>
+                            <TD align=middle>删除</TD>
+                          </TR>
+                        </TBODY>
+                      </TABLE>
+                      <P></P>
+                    </DIV></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button name=Refresh onclick="return doRefresh();" type=button value="刷 新">
+&nbsp;
+                    <INPUT class=button name=dele onclick=doUPnPDel(); disabled type=button value="删 除">
+&nbsp;
+                    <INPUT class=button name=deleAll onclick=doUPnPClearAll(); disabled type=button value=删除所有>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

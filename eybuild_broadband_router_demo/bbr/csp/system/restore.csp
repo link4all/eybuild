@@ -1,0 +1,85 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	if (!isblankstr(G("Submit"))) {
+		make_default_config(bbr, errmsg);
+	}
+%>
+<HTML>
+<HEAD>
+<TITLE>backup</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doSubmit(){
+	if(confirm("恢复出厂设置将丢失现有的配置，您确定要继续吗？")){
+		return true;
+	}else {
+		return false;
+	}
+}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD class=title vAlign=center align=left width=495>恢复出厂设置</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE class=space cellSpacing=0 cellPadding=0 width=410 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>单击此按钮将使路由器的所有设置恢复到出厂时的默认状态。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=410 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD width=326><INPUT type=submit class=button id=Submit value="恢复出厂设置" name=Submit></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;</TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+      width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+</BODY>
+</HTML>

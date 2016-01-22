@@ -1,0 +1,194 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	int 				modified_ok = 0;
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Submit"))) {
+	    int 			i;
+	    
+	    if (strcmp(bbr->account.user, G("oldname")) || 
+	        strcmp(bbr->account.passwd, G("oldpassword")) )
+		{
+			modified_ok = -1;
+		} 
+		
+	    /* not same with current value */
+	    else if (strcmp(bbr->account.user, G("newname")) || 
+	        strcmp(bbr->account.passwd, G("newpassword")) )
+	    {
+		    /* create session id */
+			srand(time(NULL));
+			for (i=0; i<8; i++) {
+				bbr->account.session_id[i] = (rand() % 10) + '0';
+			}
+			
+			/* store to configure file */
+			BUFCPY(bbr->account.user, G("newname"));
+			BUFCPY(bbr->account.passwd, G("newpassword"));
+			save_bbr(bbr, errmsg);
+			
+			modified_ok = 1;
+		}
+	}
+%>
+<HTML>
+<HEAD>
+<TITLE>password</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function charCompareA(szname,en_limit,cn_limit){
+var c;var ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+if(szname.length > en_limit) return false;
+for (var i = 0; i < szname.length; i++){
+c = szname.charAt(i);
+if (ch.indexOf(c) == -1){if(szname.length > cn_limit)
+return false;}}return true;}
+function doClear(){
+for(var i = 0; i < 5; i ++){
+document.forms[0].elements[i].value = "";}}
+function doSubmit(){
+	for(var i = 0; i < 5; i ++){
+		if(document.forms[0].elements[i].value == "") {
+			alert("输入不能为空！");
+			var element = document.forms[0].elements[i];
+			if(element){
+				element.focus();element.select();
+			}
+			return false;
+		} else {
+		if (0) {
+			}
+			if(!charCompare(document.forms[0].elements[i].value,14,0)){
+				alert("输入中含有非法字符，请您重新输入！");
+				var element = document.forms[0].elements[i];
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}
+			
+			if(2==i||3==i)if(!charCompareA(document.forms[0].elements[i].value,14,0)){
+			alert("输入中含有非法字符，请您重新输入！\n（请不要输入字母、数字、中划线、下划线以外的字符。）");
+			var element = document.forms[0].elements[i];
+			if(element){
+			element.focus();element.select();}
+			return false;}
+		}
+	}
+		if(document.forms[0].elements[3].value != document.forms[0].elements[4].value){
+		alert("新口令和确认新口令必须一致！");
+		var element = document.forms[0].elements[4];
+		if(element){element.focus();element.select();}
+	return false;}return true;}
+
+function err_report() {
+	<% if (0 > modified_ok) { %>
+	alert("原口令不正确!");
+	document.forms[0].elements[1].focus();
+	document.forms[0].elements[1].select();
+	<% } else if (0 < modified_ok) { %>
+	alert("用户名和口令修改完毕, 请重新登录!");
+	location.href="<% =cgiPrefix(NULL) %>/login.csp";
+	<% } %>
+}
+//--></SCRIPT>
+</HEAD>
+<BODY onload="err_report()">
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="ChangeLoginPwdRpm.files/arc.gif" width=7></TD>
+          <TD class=title vAlign=center align=left width=495>修改登录口令</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>本页修改系统管理员的用户名及口令。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space height=100 cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>原用户名：</TD>
+                          <TD><INPUT class=text id=oldname maxLength=14 size=15 
+                  value="<% =bbr->account.user %>" name=oldname></TD>
+                        </TR>
+                        <TR>
+                          <TD width=98>原口令：</TD>
+                          <TD width=302><INPUT class=text id=oldpassword type=password 
+                  maxLength=14 size=15 name=oldpassword
+                  value="<% =G("oldpassword") %>"></TD>
+                        </TR>
+                        <TR>
+                          <TD>新用户名：</TD>
+                          <TD><INPUT class=text id=newname maxLength=14 size=15 name=newname
+                  value="<% =G("newname") %>"></TD>
+                        </TR>
+                        <TR>
+                          <TD>新口令：</TD>
+                          <TD><INPUT class=text id=newpassword type=password 
+                  maxLength=14 size=15 name=newpassword
+                  value="<% =G("newpassword") %>"></TD>
+                        </TR>
+                        <TR>
+                          <TD>确认新口令：</TD>
+                          <TD><INPUT class=text id=newpassword2 type=password 
+                  maxLength=14 size=15 name=newpassword2
+                  value="<% =G("newpassword2") %>"></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="ChangeLoginPwdRpm.files/empty.gif" width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Submit type=submit value="保 存" name=Submit>
+&nbsp;
+                    <INPUT class=button id=Help onclick=doClear(); type=button value="清 空" name=Help></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="ChangeLoginPwdRpm.files/empty.gif" 
+    width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

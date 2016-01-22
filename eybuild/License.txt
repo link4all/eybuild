@@ -1,0 +1,19 @@
+License about eybuild/csp
+
+1. Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+
+2. If you used it for yourself, but not for your company, you can copy 
+   this develop environment as you like. You should keep this license.
+   More license infomation please mail to: eybuild@hotmail.com
+
+3. If you copy any part of the source code, you should attached this license
+   file, or copy the whole content of this license to where you used.
+
+4. If you want to get support, you can email to eybuild@hotmail.com, 
+   also you can access http://www.eybuild.com
+
+5. This software is provided 'as-is', without any express or implied
+   warranty. In no event will the authors be held liable for any damages
+   arising from the use of this software.
+
+

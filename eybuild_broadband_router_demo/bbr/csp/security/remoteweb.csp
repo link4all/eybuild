@@ -1,0 +1,127 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		bbr->rmanage.wan_port = atoi(G("port"));
+		strcpy(bbr->rmanage.remote_manage_host, G("ip"));
+
+		save_bbr(bbr, errmsg);
+	}
+	
+%>
+<HTML>
+<HEAD>
+<TITLE>control</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+var controlport;
+function doLoad(){controlport = document.forms[0].port.value;}
+function doSubmit(){
+if(document.forms[0].port.value != ""){
+if(!is_port(document.forms[0].port.value)){	
+var element =document.forms[0].port;
+if(element){element.focus();element.select();}
+return false;}}
+if(document.forms[0].ip.value != ""){
+if(!is_ipaddr(document.forms[0].ip.value)){	
+var element =document.forms[0].ip;
+if(element){element.focus();element.select();}
+return false;}}
+if(document.forms[0].port.value != "" && controlport != document.forms[0].port.value)
+alert("注意：只有在您重启路由器后，WEB管理端口的更改才能生效！");	
+return true;}
+//--></SCRIPT>
+</HEAD>
+<BODY onload=doLoad();>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>"  method=post onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD class=title vAlign=center align=left width=495>远端WEB管理</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置路由器的WEB管理端口，同时也设置允许从广域网中执行远端WEB管理的计算机的IP地址。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD class=top width=49>注意：</TD>
+                          <TD 
+                  width=351>1、本路由器默认的WEB管理端口为80，如果您改变了该默认值（例如改为8080），则您必须用“IP地址:端口”的方式（例如http://192.168.1.1:8080）才可以登录路由器执行WEB界面管理。这项功能需要重启路由器之后才能生效。</TD>
+                        </TR>
+                        <TR>
+                          <TD>&nbsp;</TD>
+                          <TD>2、本路由器默认的远端WEB管理IP地址为0.0.0.0，在此默认状态下，来自广域网的任何一台计算机都不能登录路由器执行远端WEB管理，如果您改变了默认的远端WEB管理IP地址（例如改为61.88.88.88），那么广域网中只有具有该指定IP地址（例如61.88.88.88）的计算机才能登录路由器执行远端WEB管理。如果将远端WEB管理IP地址设为255.255.255.255，那么，广域网中所有的计算机都可以登录路由器执行远端WEB管理。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD height=25>WEB管理端口：</TD>
+                          <TD><INPUT class=text id=port maxLength=5 size=6 value=<% =$bbr->rmanage.wan_port %> 
+                  name=port></TD>
+                        </TR>
+                        <TR>
+                          <TD width=136 height=25>远端WEB管理IP地址：</TD>
+                          <TD width=264><INPUT class=text id=ip maxLength=15 size=16 
+                  value="<% =bbr->rmanage.remote_manage_host %>" name=ip></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Submit type=submit value="保 存" name=Save>
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

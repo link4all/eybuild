@@ -1,0 +1,116 @@
+<HTML>
+<HEAD>
+<TITLE>domainfilter</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<STYLE type=text/css>
+A.tp3:visited {
+	COLOR: #0000ff
+}
+A.tp3:link {
+	COLOR: #0000ff
+}
+</STYLE>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doAll(val){if(val=="DelAll"){if(!confirm("您确认要删除当前所有的条目吗？")) return;} location.href="/userRpm/DomainFilterRpm.htm?doAll="+val;}
+function doAdd(nPage){location.href="/userRpm/DomainFilterRpm.htm?Add=Add&Page="+nPage;}
+function doPage(nPage){location.href="/userRpm/DomainFilterRpm.htm?Page="+nPage;}
+function ResetStatus(strInfo){window.status=strInfo;return true;}
+function doBack(nPage){location.href="/userRpm/DomainFilterRpm.htm?Page="+nPage;}function is_domain(domain_string){
+var c; var ch = "-.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+for(var i = 0; i < domain_string.length; i++){
+c = domain_string.charAt(i);
+if(ch.indexOf(c) == -1)
+return false;} return true;}
+function doSubmit(){
+var i;
+var domain = document.forms[0].domain;
+if(domain.value != ""){
+if(!is_domain(domain.value)){
+alert("域名输入含有非法字符，请重新输入！");
+var element = domain;
+if(element){element.focus();element.select();}return false;} }}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action=/userRpm/DomainFilterRpm.htm encType=multipart/form-data method=get 
+onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD align=left class=title vAlign=center width=495>域名过滤</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=420>
+                      <TBODY>
+                        <TR>
+                          <TD>本页通过域名过滤来限制局域网中计算机对指定的广域网网站的访问。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=4 cellSpacing=0 class=space 
+            width=420>
+                      <TBODY>
+                        <TR>
+                          <TD>域&nbsp;&nbsp;&nbsp;名：</TD>
+                          <TD><INPUT class=textspecial maxLength=30 name=domain 
+                size=32></TD>
+                        </TR>
+                        <TR>
+                          <TD>状&nbsp;&nbsp;&nbsp;态：</TD>
+                          <TD><SELECT class=list name=State size=1>
+                              <OPTION 
+                    value=0>失效&nbsp;</OPTION>
+                              <OPTION selected 
+                    value=1>生效&nbsp;</OPTION>
+                            </SELECT></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT name=Changed type=hidden 
+            value=FALSE>
+                    <INPUT name=SelIndex type=hidden value=0>
+                    <INPUT 
+            name=Page type=hidden value=1>
+&nbsp;&nbsp;
+                    <INPUT class=button name=Save type=submit value="保 存">
+&nbsp;
+                    <INPUT class=button name=Back onclick=doBack(1); type=button value="返 回">
+                  </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

@@ -1,0 +1,48 @@
+<HTML>
+<HEAD>
+<TITLE>banner</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE type=text/css>
+.font {
+	COLOR: #ffffff; FONT-FAMILY: "Courier New", "Courier", "mono"; FONT-SIZE: 12px
+}
+TD {
+	FONT-FAMILY: "Times New Roman", "宋体"; FONT-SIZE: 12px
+}
+FORM {
+	FONT-FAMILY: "Times New Roman", "宋体"; FONT-SIZE: 12px
+}
+BODY {
+	FONT-FAMILY: "Arial Black", "黑体"; FONT-SIZE: 16px
+}
+.unnamed1 {
+	LETTER-SPACING: 50px; WORD-SPACING: 100px
+}
+.unnamed2 {
+	WORD-SPACING: 100px
+}
+.style1 {
+	COLOR: #ffffff; FONT-FAMILY: "黑体"; FONT-SIZE: 36px; FONT-WEIGHT: bold; LETTER-SPACING: 5px; WORD-SPACING: 5px
+}
+.style2 {
+	FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 32px; FONT-WEIGHT: bold
+}
+</STYLE>
+</HEAD>
+<BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0>
+<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%">
+  <TBODY>
+    <TR>
+      <TD background=<% =romPrefix(NULL) %>/rom/bg_title1.jpg width=72><IMG src="<% =romPrefix(NULL) %>/rom/banner.jpg"></TD>
+      <TD 
+      background=<% =romPrefix(NULL) %>/rom/bg_title1.jpg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+      class=style1>高性能宽带路由器</SPAN></TD>
+    </TR>
+    <TR>
+      <TD bgColor=#173a7e height=3 width=72></TD>
+      <TD bgColor=#173a7e height=3 width="100%"></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</BODY>
+</HTML>

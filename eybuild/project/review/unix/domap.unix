@@ -1,0 +1,26 @@
+#!/bin/bash
+# Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+#
+# modification history
+# --------------------
+# 01b, 2006-3-23 newzy  add get current directory
+# 01a, 2006-2-15 newzy  create
+#
+
+#########################################################
+DEST_DIR=../cspsrc
+
+CSP_MAPFILE=../cspmap.map
+CSP_MAPLIST=csp_maplist
+ROM_MAPFILE=../rommap.map
+ROM_MAPLIST=rom_maplist
+#########################################################
+
+# get current directory
+# href: http://bbs.chinaunix.net/viewthread.php?tid=678378&extra=&page=3
+[ ${0:0:1} = / ] && c_dir=${0%/*} || c_dir=$PWD/${0%/*}
+
+# REM convert file
+$EYBUILD_BASE/bin/donemap.unix $DEST_DIR $CSP_MAPFILE $CSP_MAPLIST $ROM_MAPFILE $ROM_MAPLIST $c_dir
+
+

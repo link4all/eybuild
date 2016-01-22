@@ -1,0 +1,95 @@
+<HTML>
+<HEAD>
+<TITLE>设置向导</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doLoad(){
+}
+//--></SCRIPT>
+</HEAD>
+<BODY onload=doLoad();>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+width=7></TD>
+          <TD align=left class=title vAlign=center width=495>设置向导</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=410>
+                      <TBODY>
+                        <TR>
+                          <TD>使用本设置向导，您可以轻松地完成上网所需的基本设置。即使您对网络知识一窍不通，您也能够依据提示轻轻松松地完成设置。如果您是一位高手，您完全可以退出本向导程序，直接到菜单项中选择您需要修改的设置项进行设置。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 
+              width=410>
+                      <TBODY>
+                        <TR>
+                          <TD>如需要继续，请单击“下一步”。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 
+              width=410>
+                      <TBODY>
+                        <TR>
+                          <TD>如需要退出设置向导，请单击“退出向导”。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <BR>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=490>
+                      <TBODY>
+                        <TR>
+                          <TD><INPUT CHECKED id=appear name=appear type=checkbox 
+                  value=2>
+                            下次登录不再自动弹出向导</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30><DIV align=right>&nbsp;
+                      <INPUT class=button id=Submit name=Submit type=submit value=退出向导>
+&nbsp;
+                      <INPUT class=button id=Submit name=Submit type=submit value=下一步>
+&nbsp; </DIV></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <INPUT name=ClientId 
+type=hidden value=9>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

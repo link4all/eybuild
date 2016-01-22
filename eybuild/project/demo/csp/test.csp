@@ -1,0 +1,10 @@
+<html>
+<head>
+	<title>eybuild CSP demo</title>
+</head>
+<body>
+	<P>This is in test.csp</P>
+	<P>What you input is: <B><% =getParameter("inputbox") %></B></P>
+	<P>[ <A href="<% =cgiPrefix2(NULL, "/demo/main.csp") %>">Return</A> ]</P>
+	</body>
+</html>

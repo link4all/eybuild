@@ -1,0 +1,148 @@
+<HTML>
+<HEAD>
+<TITLE>domainfilter</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<STYLE type=text/css>
+A.tp3:visited {
+	COLOR: #0000ff
+}
+A.tp3:link {
+	COLOR: #0000ff
+}
+</STYLE>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doAll(val){if(val=="DelAll"){if(!confirm("您确认要删除当前所有的条目吗？")) return;} location.href="<% =thisCgiPrefix() %>doAll="+val;}
+function doAdd(nPage){location.href="<% =thisCgiPrefix() %>Add=Add&Page="+nPage;}
+function doPage(nPage){location.href="<% =thisCgiPrefix() %>Page="+nPage;}
+function ResetStatus(strInfo){window.status=strInfo;return true;}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=520>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD align=left class=title vAlign=center width=513>域名过滤</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=520>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=518><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=470>
+                      <TBODY>
+                        <TR>
+                          <TD>本页通过域名过滤来限制局域网中计算机对指定的广域网网站的访问。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=1 cellPadding=0 cellSpacing=0 class=space 
+            width=470>
+                      <TBODY>
+                        <TR>
+                          <TD><TABLE align=center border=0 cellPadding=0 cellSpacing=0 
+                  class=space width=450>
+                              <TBODY>
+                                <TR>
+                                  <TD colSpan=2>防火墙相关设置（如需更改，请到“安全设置”－“防火墙设置”）</TD>
+                                </TR>
+                                <TR>
+                                  <TD width=120>防火墙功能：</TD>
+                                  <TD width=328><B>关闭</B></TD>
+                                </TR>
+                                <TR>
+                                  <TD width=120>域名过滤功能：</TD>
+                                  <TD 
+            width=328><B>关闭</B></TD>
+                                </TR>
+                              </TBODY>
+                            </TABLE></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=1 cellPadding=0 cellSpacing=0 class=space 
+            width=470>
+                      <TBODY>
+                        <TR>
+                          <TD align=middle>ID</TD>
+                          <TD align=middle width=230>域 名</TD>
+                          <TD align=middle noWrap>状 态</TD>
+                          <TD align=middle>修 改</TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle>1</TD>
+                          <TD align=left>&nbsp;www.zhangzhuang.com</TD>
+                          <TD align=middle>生效</TD>
+                          <TD align=middle noWrap><A class=tp3 
+                  href="<% =thisCgiPrefix() %>Modify=0" 
+                  onmouseover="return ResetStatus('修改');">修改</A>&nbsp;<A 
+                  class=tp3 
+                  href="<% =thisCgiPrefix() %>Del=0" 
+                  onmouseover="return ResetStatus('删除');">删除</A></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle>2</TD>
+                          <TD align=left>&nbsp;www.xiaohezi.com</TD>
+                          <TD align=middle>生效</TD>
+                          <TD align=middle noWrap><A class=tp3 
+                  href="<% =thisCgiPrefix() %>Modify=1" 
+                  onmouseover="return ResetStatus('修改');">修改</A>&nbsp;<A 
+                  class=tp3 
+                  href="<% =thisCgiPrefix() %>Del=1" 
+                  onmouseover="return ResetStatus('删除');">删除</A></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=470>
+                      <TBODY>
+                        <TR>
+                          <TD colSpan=3 width=468><INPUT class=button name=Add onclick=doAdd(1); type=button value=添加新条目>
+&nbsp;
+                            <INPUT class=button name=EnAll onclick="doAll('EnAll');" type=button value=使所有条目生效>
+&nbsp;
+                            <INPUT class=button name=DisAll onclick="doAll('DisAll');" type=button value=使所有条目失效>
+&nbsp;
+                            <INPUT class=button name=DelAll onclick="doAll('DelAll');" type=button value=删除所有条目></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button disabled name=previous onclick=doPage(1); type=button value=上一页>
+&nbsp;
+                    <INPUT class=button disabled name=next onclick=doPage(2); type=button value=下一页>
+                    <INPUT name=Page type=hidden value=1>
+&nbsp;</TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

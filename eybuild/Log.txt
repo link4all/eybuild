@@ -1,0 +1,92 @@
+#######################
+1. 8:48 2005-12-26
+   newzy rename tool chain('web2bin' no change):
+   a. 'csp' to 'ebuild'(means easy build web applications).
+   b. 'cspcompile' to 'csp2bin'
+
+#######################
+2. 17:09 2005-12-31
+   a. newzy rename ebuild to "eybuild'(easy build),
+      because the name 'ebuild' has exist in other's product.
+   b. release version 00.01.00
+   c. In this version has 3 parts:
+      1) ebox	    - the libs which will be used by applications
+      2) csp2bin    - convert .csp into .c files
+      3) web2bin    - convert any file into .c arraies to support ROM-format
+   d. add support "directive" in .csp, 
+      format as: <% @/directive/ [space|tab|=] ["]/value/["] %>
+      // - must filled,
+      [] - options
+      |  - one of options
+      
+      AVAIABLE DIRECTIVE: 
+      pagesize		- page buffer size, octal or decimal or hex, eg: 0x800
+      autoflush	    - TRUE/FALSE
+      mimeheader	- avaiable HTTP MIME header
+      require		- invoke another page, eg: /cgi-bin/test.csp
+      
+#######################
+3. 2006-2-5
+   Release versioney build_00_60_00 and doc
+
+#######################
+4. 2006-2-10
+   Release version eybuild_00_60_01
+
+#######################
+5. 2006-2-17
+   Release version eybuild_00_70_00 to support unix
+
+#######################
+6. 2006-3-24
+   this version fix all known bugs, and add a few new function.
+   for more information see the manual v0.3
+   Release version eybuild_00_80_00, bata version
+   2006-3-28
+   Release version eybuild_00_80_02, release version
+
+#######################
+7. 2006-4-25
+   this version add FastCGI
+   fixed some little bugs and make it more friendly.
+   Release version eybuild_00_80_03 2006-04-12
+   Release version eybuild_00_80_04 2006-04-25
+
+#######################
+8. 2006-9-08
+   Release version eybuild_01_00_00 2006-09-08
+   this version fixed all known bugs, and add following new function:
+   a. add cspengine, eybuild can compile and run csp page automaticly.
+   b. support virtual path map, map the virtual path to an ID
+   c. enhance domap, like unix make, only recompile the newest csp/rom files.
+   d. redesigned eybuild interal framework, make it more expansible, portable
+
+   internal release version (between 2006.5 - 2006.8): 
+   V00.08.06, V00.09.06, V00.09.07, V00.09.08
+   
+#######################
+9. 2006-9-24
+   Release version eybuild V1.0.2: eybuild-x86-1.0.2.tar.gz
+   what new in this version:
+   a. add block tag @gobal/@g, @on_begin/@b, @on_end/@e
+   b. add variable define tag '!!'  
+   c. add webgui operation 
+   d. optimize search in virtual directory 
+   e. add 'test' sample in project
+
+#######################
+10. 2006-12-6
+   Release version eybuild V1.1.2: eybuild-x86-1.1.2.tar.gz
+   what new in this version:
+   a. add compress option "-d*" for csp2bin & web2bin 
+   b. add C++ option "-cpp" for csp2bin 
+   c. add multi-language support toolkit
+   d. add map to any extern-name for csp2bin
+   e. fixed known bugs 
+   f. add 'cplus' & 'cgi-bin' into project
+
+   release important internal version:
+   V1.0.4, V1.0.5, V1.1.0, V1.1.1
+
+Release packeting date:
+Tue Dec  5 06:47:31 CST 2006

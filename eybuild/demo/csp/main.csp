@@ -1,0 +1,10 @@
+<html>
+<body>
+Hello world. <img src="<% =romPrefix(NULL) %>/img/face.gif">
+<BR>
+<form action="<% =cgiPrefix(NULL) %>/demo/test.csp" method="post">
+    ÇëÔÚÊäÈë: <input type="text" name="inputbox1"><br>
+    <input type="submit" name="testit" value="testit"><br>
+</form>
+</body>
+</html>

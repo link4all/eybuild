@@ -1,0 +1,46 @@
+<HTML>
+<TITLE>CSP/eybuild sample result</TITLE>
+<HEAD>
+<h2>Post form result:</h3>
+<% @include <stdlib.h> %>
+
+	Input something: <input type="text" value="<% =G("inputbox1") %>" size="25"><BR>
+
+	<p>
+	<textarea name= value="" cols="45" rows="3" ><% =G("textarea1") %></textarea>
+
+	<p>
+	select one radio:
+	1. <% RADIO_BOX("choices", "1", G("choices"), NULL) %>	
+	2. <% RADIO_BOX("choices", "2", G("choices"), NULL) %>	
+	3. <% RADIO_BOX("choices", "3", G("choices"), NULL) %>	
+
+	<br>
+	check following: 
+	1. <% CHECK_BOX2("checkbox1", "1", atoi(G("checkbox1")), NULL) %>
+	2. <% CHECK_BOX2("checkbox2", "2", atoi(G("checkbox2")), NULL) %>
+	3. <% CHECK_BOX2("checkbox3", "3", atoi(G("checkbox3")), NULL) %>
+
+	<p>
+	Select more than one(default 3):
+	<% SELECT_BEGIN("selone", G("selone"), NULL) %>
+		<% OPTIONS_ADD("1", "the 1st") %>
+		<% OPTIONS_ADD("2", "the second") %>
+		<% OPTIONS_ADD("3", "the third") %>
+		<% OPTIONS_ADD("4", "the forth") %>
+	<% SELECT_END() %>
+
+	<p>
+	Select one (default 2):<br>
+	<% SELECT_BEGIN2("selmore", atoi(G("selmore"))-1, "size=4") %>
+		<% OPTIONS_ADD2(1, "this is the 1st") %>
+		<% OPTIONS_ADD2(2, "this is the second") %>
+		<% OPTIONS_ADD2(3, "this is the third") %>
+		<% OPTIONS_ADD2(4, "this is the forth") %>
+	<% SELECT_END2() %>
+</pre>
+<p>
+[ <A href="<% =cgiPrefix(NULL) %>/main.csp">Return</a> ]
+
+</body>
+</HTML>

@@ -1,0 +1,104 @@
+<% @b
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "Please login";
+	char *				puser = getCookie("username");
+	char *				pid   = getCookie("session_id");
+	char *				pname = G("usrname");
+	char *				ppswd = G("passwd");
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+
+	/* have been login */
+	if (	!isblankstr(puser) && !isblankstr(pid) &&
+			!strcmp(puser, bbr->account.user) && 
+			!strcmp(pid, bbr->account.session_id))			
+	{
+		redirect("%s", get_filename(getScriptName())); 	/* redirect to this page */
+		return OK;
+	}
+	
+	/* save user submit */
+	if (!isblankstr(G("login"))) 
+	{
+		if (!strcmp(pname, bbr->account.user) && 
+			!strcmp(ppswd, bbr->account.passwd))
+		{
+#if 1
+			/* don't set expire */
+			setcookie("username", pname, NULL);
+			setcookie("session_id", bbr->account.session_id, NULL);
+#else
+			/* set expire time 1 day */
+			setcookie("username", pname, time(NULL)+3600*24, NULL);
+			setcookie("session_id", bbr->account.session_id, time(NULL)+3600*24, NULL);
+#endif
+
+			redirect("%s", get_filename(getScriptName())); 	/* redirect to this page */
+			return OK;
+		}
+		
+		if (isblankstr(ppswd))
+			sprintf(errmsg, "请输入用户口令!");
+		else
+			sprintf(errmsg, "用户口令不正确!");
+	}
+	
+	/* default user account: user:user, auto filled into
+	 * for release version please remove this part
+	 */
+	if (!strcmp("user", bbr->account.user) && 
+		!strcmp("user", bbr->account.passwd))
+	{
+		ppswd = "user";
+	}
+%>
+<html>
+<head>
+<META content=no-cache http-equiv=pragma>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<title>BBR 登录(<% =BBR_VERSION %>)</title>
+<style>
+<!-- 
+p, td, div, b {	font-size: 11pt; }
+p {}
+td {height: 35px;}
+div { color: red }
+#title {font-size: 16px; color: #663300; width: 80px; }
+#text { width: 150px; }
+-->
+</style>
+<script language=JavaScript><!-- 
+if (top.location !== self.location){top.location.href=self.location;}
+function set_focus() {
+	document.forms[0].elements[1].focus();
+}
+-->
+</script>
+</head>
+<body onload="set_focus();">
+<p style="margin-top: 80px">
+<center>
+<form action=<% =thisCgiPrefix() %> method=post>
+  <table width=300 border=1 cellpadding="2" cellspacing="0" bordercolor="#EA8A1C">
+    <tr>
+      <td height=40 colspan=2 bgcolor="#FFDA00"><strong>登录到 Broadband Router:</strong></td>
+    <tr>
+      <td id="title">姓 名：</td>
+      <td height=30><input id="text" type=text name=usrname size=12 value="<% =bbr->account.user %>"></td>
+    <tr>
+      <td id="title">口 令：</td>
+      <td height=30><input id="text" type=password name=passwd size=12 value="<% =ppswd %>"></td>
+    <tr>
+      <td colspan=2 align=center><input type=submit name=login value="提 交"></td>
+  </table>
+ </FORM>
+<% if ('\0' != errmsg[0]) { %>
+<div><% =errmsg %></div>
+<% } %>
+<p style="margin-top: 30px">(来自 http://www.eybuild.com)</p>
+</center>
+</body>
+</html>

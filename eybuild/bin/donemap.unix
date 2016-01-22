@@ -1,0 +1,79 @@
+#!/bin/bash
+# donemap.unix - script for compile csp files and rom files
+#
+# Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved. 
+#
+# modification history
+# --------------------
+# 02a, 2006-5-16 	newzy add support -l option
+# 02a, 2006-3-23 	newzy add set current directory
+# 01a, 2006-2-15 	newzy create
+#
+
+DEST_DIR=$1
+CSP_MAPFILE=$2
+CSP_MAPLIST=$3
+ROM_MAPFILE=$4
+ROM_MAPLIST=$5
+CUR_DIR=$6
+
+# option -cpp 
+if [ "TRUE" = "$7" ] || [ "true" = "$7" ]; then 
+	CSP_OPTIONS="-cpp"
+fi
+shift
+
+# option -d
+if [ "TRUE" = "$7" ] || [ "true" = "$7" ]; then 
+	CSP_OPTIONS="$CSP_OPTIONS -d $9"
+else
+	CSP_OPTIONS="$CSP_OPTIONS $9"
+fi
+
+# option -d
+if [ "TRUE" = "$8" ] || [ "true" = "$8" ]; then 
+	ROM_OPTIONS="-d $9"
+else
+	ROM_OPTIONS=$9
+fi
+	
+# echo CSP_OPTIONS = $CSP_OPTIONS
+# echo ROM_OPTIONS = $ROM_OPTIONS 
+
+# set current directory
+OLD_DIR=$PWD
+cd $CUR_DIR
+
+DEST_FILE=$DEST_DIR/$ROM_MAPLIST.c
+
+# COMPILE CSP
+if (test ! -z $CSP_MAPFILE)
+then
+	echo "########## Build csp ##########"
+	$EYBUILD_BASE/bin/csp2bin $CSP_OPTIONS $CSP_MAPFILE $CSP_MAPLIST $DEST_DIR
+fi
+
+# test command result
+if (test $? -ne 0) 
+then
+	exit 254; 
+fi
+echo 
+
+# COMPILE ROM
+if (test ! -z $ROM_MAPFILE)
+then
+    echo "########## Build romfile: ##########"
+	$EYBUILD_BASE/bin/web2bin $ROM_OPTIONS $ROM_MAPFILE $ROM_MAPLIST $DEST_DIR
+fi
+
+# test command result
+if (test $? -ne 0)
+then
+	exit 254;
+fi
+echo 
+
+# exit to old call dir
+cd $OLD_DIR
+

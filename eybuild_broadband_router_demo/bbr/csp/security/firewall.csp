@@ -1,0 +1,168 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		bbr->ip_filter.firewall_enable = atoi(G("FireWall"));
+		bbr->ip_filter.ip_filter_enable = atoi(G("IpFilt"));
+		bbr->ip_filter.ip_filter_allow_all = atoi(G("IpRule"));
+		bbr->ip_filter.domain_filter_enable = atoi(G("DomainFilt"));
+		bbr->ip_filter.mac_filter_enable = atoi(G("MacFilt"));
+		bbr->ip_filter.mac_filter_allow_added = atoi(G("MacRule"));
+		
+		save_bbr(bbr, errmsg);
+	}
+	
+%>
+<HTML>
+<HEAD>
+<TITLE>wanipfilter</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript>
+<!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE cellSpacing=0 cellPadding=0 width=580 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD class=title vAlign=center align=left width=573>防火墙设置</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=580 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=578><TABLE class=space cellSpacing=0 cellPadding=0 width=520 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>本页对防火墙的各个过滤功能的开启与关闭进行设置。只有防火墙的总开关是开启的时候，后续的“IP地址过滤”、“域名过滤”、“MAC地址过滤”、“WAN口Ping”才能够生效，反之，则失效。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <CENTER>
+                      <TABLE class=space cellPadding=2 width=520 border=0>
+                        <TBODY>
+                          <TR>
+                            <TD width=21><% CHECK_BOX2("FireWall", "1", bbr->ip_filter.firewall_enable, ""); %></TD>
+                            <TD width=461>开启防火墙（防火墙的总开关）</TD>
+                          </TR>
+                        </TBODY>
+                      </TABLE>
+                      <TABLE class=space cellSpacing=0 cellPadding=0 width=520 border=1>
+                        <TBODY>
+                          <TR>
+                            <TD width=520><TABLE cellSpacing=0 cellPadding=0 width=520 border=0>
+                                <TBODY>
+                                  <TR>
+                                    <TD width=520 colSpan=2><% CHECK_BOX2("IpFilt", "1", bbr->ip_filter.ip_filter_enable, ""); %>
+                                      开启IP地址过滤</TD>
+                                  </TR>
+                                  <TR>
+                                    <TD>&nbsp;</TD>
+                                  </TR>
+                                  <TR>
+                                    <TD align=left width=520 colSpan=2><P>&nbsp;&nbsp; 缺省过滤规则</P></TD>
+                                  </TR>
+                                  <TR>
+                                    <TD align=middle width=40><% RADIO_BOX2("IpRule", "0", bbr->ip_filter.ip_filter_allow_all, ""); %></TD>
+                                    <TD width=480>凡是不符合已设IP地址过滤规则的数据包，<FONT 
+                        color=#ff0000>允许</FONT>通过本路由器</TD>
+                                  </TR>
+                                  <TR>
+                                    <TD align=middle width=40><% RADIO_BOX2("IpRule", "1", bbr->ip_filter.ip_filter_allow_all, ""); %></TD>
+                                    <TD width=480>凡是不符合已设IP地址过滤规则的数据包，<FONT 
+                        color=#ff0000>禁止</FONT>通过本路由器</TD>
+                                  </TR>
+                                </TBODY>
+                              </TABLE></TD>
+                          </TR>
+                        </TBODY>
+                      </TABLE>
+                      <TABLE height=30 cellSpacing=0 cellPadding=0 width=520 border=1>
+                        <TBODY>
+                          <TR>
+                            <TD width=520><TABLE cellSpacing=0 cellPadding=0 width=520 border=0>
+                                <TBODY>
+                                  <TR>
+                                    <TD width=520 colSpan=2><% CHECK_BOX2("DomainFilt", "1", bbr->ip_filter.domain_filter_enable, ""); %>开启域名过滤</TD>
+                                  </TR>
+                                </TBODY>
+                              </TABLE></TD>
+                          </TR>
+                        </TBODY>
+                      </TABLE>
+                      <TABLE class=space cellSpacing=0 cellPadding=0 width=520 border=1>
+                        <TBODY>
+                          <TR>
+                            <TD width=520><TABLE cellSpacing=0 cellPadding=0 width=520 border=0>
+                                <TBODY>
+                                  <TR>
+                                    <TD width=520 colSpan=2><% CHECK_BOX2("MacFilt", "1", bbr->ip_filter.mac_filter_enable, ""); %>
+                                      开启MAC地址过滤</TD>
+                                  </TR>
+                                  <TR>
+                                    <TD width=520 colSpan=2>&nbsp;</TD>
+                                  </TR>
+                                  <TR>
+                                    <TD align=left width=520 colSpan=2><P>&nbsp;&nbsp; 缺省过滤规则</P></TD>
+                                  </TR>
+                                  <TR>
+                                    <TD align=middle width=40><% RADIO_BOX2("MacRule", "0", bbr->ip_filter.mac_filter_allow_added, ""); %></TD>
+                                    <TD width=480><FONT 
+                        color=#ff0000>仅允许</FONT>已设MAC地址列表中已启用的MAC地址访问Internet</TD>
+                                  </TR>
+                                  <TR>
+                                    <TD vAlign=top align=middle width=40>
+                                    	<% RADIO_BOX2("MacRule", "1", bbr->ip_filter.mac_filter_allow_added, ""); %></TD>
+                                    <TD width=480><FONT 
+                        color=#ff0000>禁止</FONT>已设MAC地址列表中已启用的MAC地址访问Internet，允许其他MAC地址访问Internet</TD>
+                                  </TR>
+                                </TBODY>
+                              </TABLE></TD>
+                          </TR>
+                        </TBODY>
+                      </TABLE>
+                    </CENTER></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button type=submit value="保 存" name=Save>
+&nbsp; &nbsp;</TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

@@ -1,0 +1,40 @@
+#!/usr/bin/cspengine
+<% @b 
+	@include <stdlib.h>
+	int		lpnum = 10;
+	char 	errmsg[256] = "";
+	char *	p = NULL;
+	int 	i;
+
+	if (!isblankstr(G("lpnum"))) 	/* have input */
+	{
+		lpnum = strtol(G("lpnum"), &p, 10);
+		if ( (NULL != p && '\0' != p[0]) ||	/* invalid number */
+			  lpnum <= 0 || lpnum >10000)  	/* number out range */
+		{
+			lpnum = 10;	
+			sprintf(errmsg, "Input data invalid: %.10s", htmlEncode(G("lpnum")));
+		}
+	}
+%>
+
+<html>
+<body style="font:12pts">
+<% if (!isblankstr(errmsg)) { %>
+	<p>Error:<br>&nbsp;&nbsp;<% =errmsg %><hr>
+<% } %>
+
+<form action=<% =thisCgiPrefix() %> method=post>
+	Input loop number: 
+	<input type=input name=lpnum value="<% =$lpnum %>"><p>
+	<input type=submit name=retry value=" Once more "><p>
+</form>
+<hr>
+<p>This is in: <% =__page_fullname %><p>
+
+<%	for (i=0; i<lpnum; i++) { %>
+	<b><% =$i+1 %>. </b>Hello world2.<br>
+<% 	} %>
+</body>
+</html> 
+

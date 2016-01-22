@@ -1,0 +1,210 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		BUFCPY(bbr->dmz.ip, G("ipb"));
+		bbr->dmz.enable = atoi(G("enable"));
+		
+		save_bbr(bbr, errmsg);
+	}
+	
+%>
+
+<HTML>
+<HEAD>
+<TITLE>DMZ</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function lastipverify(lastip,nMin,nMax){
+var c;
+var n = 0;
+var ch = "0123456789";
+if(lastip.length = 0)
+return false;
+for (var i = 0; i < lastip.length; i++){
+c = lastip.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(lastip) < nMin || parseInt(lastip) > nMax)
+return false; return true;}
+function is_lastip(lastip_string,nMin,nMax){
+if(lastip_string.length == 0){
+alert("请输入IP地址（" + nMin + "－" + nMax + "）！");
+return false;}
+if (!lastipverify(lastip_string,nMin,nMax)){
+alert("IP地址输入错误，请重新输入（"+ nMin + "－" + nMax + "）！");
+return false;}
+return true;}
+function macverify(mac_string){
+var c;
+var n = 0;
+var ch = "-0123456789ABCDEFabcdef";
+if (mac_string.length != 17)
+return false;
+for (var i = 0; i < mac_string.length; i++){
+c = mac_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;
+else{
+if (c == '-')
+n++;}}
+if (n != 5)
+return false;
+for(var i = 2; i < 17; i += 3){
+if (mac_string.charAt(i) != '-')
+return false;
+}return true;}
+function is_macaddr(mac_string){
+if(mac_string.length == 0){
+alert("请输入MAC地址！");
+return false;}
+if (!macverify(mac_string)){
+alert("MAC地址输入错误，请重新输入！");
+return false;}return true;}
+function portverify(port_string){
+var c;
+var ch = "0123456789";
+if(port_string.length == 0)
+return false;
+for (var i = 0; i < port_string.length; i++){
+c = port_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(port_string) <= 0 || parseInt(port_string) >= 65535)
+return false;return true;}
+function is_port(port_string){
+if(port_string.length == 0){
+alert("请输入端口地址（1－65534）！");
+return false;}
+if (!portverify(port_string)){
+alert("端口地址输入错误，请重新输入（1－65534）！");
+return false;}
+return true;}
+function is_number(num_string,nMin,nMax){
+var c;
+var ch = "0123456789";
+for (var i = 0; i < num_string.length; i++){
+c = num_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if(parseInt(num_string) < nMin || parseInt(num_string) > nMax)
+return false;return true;}
+function is_domain(domain_string){
+var c;
+var ch = "-.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+for (var i = 0; i < domain_string.length; i++){
+c = domain_string.charAt(i);
+if (ch.indexOf(c) == -1){
+alert("输入中含有非法字符，请重新输入！");
+return false;}}return true;}
+var   ele_num = 2;
+function doSubmit()
+{
+if(ele_num==3)
+{
+if(document.forms[0].elements[0].value!=""||
+document.forms[0].elements[1].value!="")
+{	if((document.forms[0].elements[0].value==0&&document.forms[0].elements[1].value==0)||
+document.forms[0].elements[0].value<0||
+document.forms[0].elements[0].value>255||
+document.forms[0].elements[1].value<0||
+document.forms[0].elements[1].value>255||
+		(document.forms[0].elements[0].value==255&&document.forms[0].elements[1].value==255))
+	{	alert("IP地址输入错误，请重新输入！");
+		return false;}
+}}
+else
+{
+if(document.forms[0].elements[0].value!="")
+{	if(!is_number(document.forms[0].elements[0].value, 1, 255) || 
+document.forms[0].elements[0].value==0||
+document.forms[0].elements[0].value<=0||
+document.forms[0].elements[0].value>=255||
+document.forms[0].elements[0].value==255)
+	{	alert("IP地址输入错误，请重新输入(1-254)！");
+		return false;	}
+}}
+	return true;
+}
+
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD align=left class=title vAlign=center width=495>DMZ主机</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>在正常情况下，NAT路由器是禁止广域网直接访问局域网里的计算机的。但是，有些时候我们又需要将局域网内的某台计算机开放给广域网，以实现双向通信，此时只要把该计算机设置为DMZ主机就可以实现了。</TD>
+                        </TR>
+                        <TR>
+                          <TD></TD>
+                        </TR>
+                        <TR>
+                          <TD>( 注意:设置DMZ主机之后，与该IP相关的防火墙设置将不起作用。)</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD width=100>DMZ主机IP地址:</TD>
+                          <TD width=150>192.168.1.
+                            <INPUT class=text id=ipb maxLength=3 name=ipb size=3
+                              value="<% =bbr->dmz.ip %>">
+                            </TD>
+                          <TD><% CHECK_BOX2("enable", "1", bbr->dmz.enable, ""); %>&nbsp;启用</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Submit name=Save type=submit value="保 存">
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

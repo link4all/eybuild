@@ -1,0 +1,51 @@
+<html>
+<head>
+	<meta http-equiv="refresh" content="1; url=<% =cgiPrefix2(NULL, "/review/review.csp") %>">
+	<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+	<title>正在跳转...</title>
+</head>
+<body>
+<%
+@include "../usr/db.h"
+@include <time.h>
+{
+	RECORD	record;
+	void *	fp;
+	time_t 	t; 
+
+	memset(&record, 0, sizeof(record));
+
+	if (	'\0' == (strncpy(record.name, getParameter("name"), sizeof(record.name)-1))[0] ||
+			'\0' == (strncpy(record.sex, getParameter("sex"), sizeof(record.sex)-1))[0] ||
+			'\0' == (strncpy(record.mail, getParameter("email"), sizeof(record.mail)-1))[0] ||
+			'\0' == (strncpy(record.msg, getParameter("content"), sizeof(record.msg)-1))[0] )
+	{
+		ebprintf(__ebfp, "'名称/性别/Email/内容' 均不能包为空");	
+	} 
+	else do 
+	{
+		/* get time */
+		t = time(NULL);
+		strftime(record.now, sizeof(record.now)-1, 
+				"%Y-%m-%d %H:%M:%S", localtime(&t));
+		/* convert sex */
+		if (!strcmp("0", record.sex))
+			strcpy(record.sex, "女");
+		else
+			strcpy(record.sex, "男");
+		
+		if (NULL == (fp=open_db("ab+")) )
+		{
+			print("打开数据库失败, 请检查权限...");
+			break;
+		}
+
+		db_insert(fp, &record);
+		close_db(fp);
+		print("留言成功，正在跳转...");
+	} while (0);
+}
+%>
+
+</body>
+</html>

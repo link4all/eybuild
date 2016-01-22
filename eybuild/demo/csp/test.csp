@@ -1,0 +1,7 @@
+<html>
+<body>
+This is in test.csp<BR>
+你在文本框输入的内容为：<% =getParameter("inputbox1") %><BR>
+[ <A href="<% =cgiPrefix(NULL) %>/demo/main.csp">返回</A> ] <BR>
+</body>
+</html>

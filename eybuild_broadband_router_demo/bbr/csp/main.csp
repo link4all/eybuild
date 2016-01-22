@@ -1,0 +1,26 @@
+<HTML>
+<HEAD>
+<TITLE>宽带路由器</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+</HEAD>
+<FRAMESET border=0 cols=* frameBorder=NO frameSpacing=0 rows=62,*,20>
+  <FRAMESET border=0 cols=133,* frameBorder=NO frameSpacing=0 rows=62>
+    <FRAME name=topLeftFrame noResize scrolling=no src="<% =cgiPrefix(NULL) %>/basic/logo.csp">
+    <FRAME name=topRightFrame noResize scrolling=no src="<% =cgiPrefix(NULL) %>/basic/banner.csp">
+  </FRAMESET>
+  <FRAMESET border=0 cols=145,* frameBorder=NO frameSpacing=0 rows=*>
+    <FRAME name=bottomLeftFrame noResize scrolling=no src="<% =cgiPrefix(NULL) %>/menu.csp">
+    <FRAME frameBorder=NO name=mainFrame src="<% =cgiPrefix(NULL) %>/basic/status.csp">
+  </FRAMESET>
+<% #if 1 %>
+    <FRAME noResize scrolling=no src="<% =cgiPrefix(NULL) %>/basic/bottom.csp">
+<% #else %>
+  <FRAMESET border=0 cols=133,* frameBorder=NO frameSpacing=0 rows=11>
+    <FRAME src="UntitledFrame-5" scrolling=no noResize rc="<% =cgiPrefix(NULL) %>/basic/bottom_left.csp">
+  </FRAMESET>
+<% #endif %>
+</FRAMESET>
+<noframes></noframes>
+</HTML>

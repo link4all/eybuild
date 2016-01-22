@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<TITLE>System Log</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=Javascript><!--
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=540>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD align=left class=title vAlign=center width=533>客户端列表</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=540>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=538><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=460>
+                      <TBODY>
+                        <TR>
+                          <TD>本页列举了路由器启动以后已经分配使用的IP地址。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=500>
+                      <TBODY>
+                        <TR>
+                          <TD align=middle noWrap width=38>索 引</TD>
+                          <TD align=middle>客户端主机名</TD>
+                          <TD align=middle width=117>客户端MAC地址</TD>
+                          <TD align=middle width=89>已分配IP地址</TD>
+                          <TD align=middle width=60>剩余租期</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=1 cellPadding=0 cellSpacing=0 class=space 
+            width=500>
+                      <TBODY>
+                        <TR>
+                          <TD align=middle width=38>1</TD>
+                          <TD align=middle>LULU</TD>
+                          <TD align=middle noWrap width=117>00-14-2A-34-7A-71</TD>
+                          <TD align=middle noWrap width=89>192.168.1.100</TD>
+                          <TD align=middle width=60>01:29:41</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <!--内容结束--></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30><DIV align=left>&nbsp;&nbsp;
+                      <INPUT class=button name=Refresh type=submit value="刷 新">
+                    </DIV></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+      width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

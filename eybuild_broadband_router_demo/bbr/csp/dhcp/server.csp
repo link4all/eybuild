@@ -1,0 +1,178 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		bbr->dhcps.enable = atoi(G("dhcpserver"));
+		BUFCPY(bbr->dhcps.pool_start, G("ip1"));
+		BUFCPY(bbr->dhcps.pool_end, G("ip2"));
+		bbr->dhcps.lease = atoi(G("lease"));
+		BUFCPY(bbr->dhcps.default_gateway, G("gateway"));
+		BUFCPY(bbr->dhcps.default_dsn, G("domain"));
+		BUFCPY(bbr->dhcps.main_dsn_server, G("dnsserver"));
+		BUFCPY(bbr->dhcps.backup_dsn_server, G("dnsserver2"));
+		
+		save_bbr(bbr, errmsg);
+	}
+	
+%>
+
+<HTML>
+<HEAD>
+<TITLE>dhcpserver</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doSubmit(){
+var MINIP = 1;
+var MAXIP = 254;
+if(document.forms[0].ip1.value!=""){
+if(!is_ipaddr(document.forms[0].ip1.value)){
+var element = document.forms[0].ip1;
+if(element){
+element.focus();
+element.select();}
+return false;}}
+if(document.forms[0].ip2.value!=""){
+if(!is_ipaddr(document.forms[0].ip2.value)){
+var element = document.forms[0].ip2;
+if(element){
+element.focus();
+element.select();}
+return false;}}
+if(document.forms[0].gateway.value!=""){
+if(!is_gatewayaddr(document.forms[0].gateway.value)){
+var element = document.forms[0].gateway;
+if(element){
+element.focus();element.select();}return false;}}
+if(!is_domain(document.forms[0].domain.value)){
+var element = document.forms[0].domain;
+if(element){element.focus();element.select();}return false;}
+if(document.forms[0].dnsserver.value != ""){
+if(!is_dnsaddr(document.forms[0].dnsserver.value)){
+var element = document.forms[0].dnsserver;
+if(element){element.focus();element.select();}return false;}}
+if(document.forms[0].dnsserver2.value != ""){
+if(!is_dnsaddr(document.forms[0].dnsserver2.value)){	
+var element = document.forms[0].dnsserver2;
+if(element){
+element.focus();
+element.select();}
+return false;}}
+alert("注意：只有在您重启路由器后，您所做的修改才能生效！");
+return true;}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+		  src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD align=left class=title vAlign=center width=495>DHCP服务</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>本路由器内建有DHCP服务器，有了它，不用您亲自动手，就可以自动将您计算机中复杂的TCP/IP协议参数配置正确。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 class=space width=400>
+                      <TBODY>
+                        <TR>
+                          <TD width=107>DHCP服务器：</TD>
+                          <TD width=283><% RADIO_BOX2("dhcpserver", "0", bbr->dhcps.enable, ""); %>
+                            不启用
+                            <% RADIO_BOX2("dhcpserver", "1", bbr->dhcps.enable, ""); %>
+                            启用 </TD>
+                        </TR>
+                        <TR>
+                          <TD>地址池开始地址：</TD>
+                          <TD><INPUT class=text maxLength=15 name=ip1 size=15 
+                  value="<% =bbr->dhcps.pool_start %>"></TD>
+                        </TR>
+                        <TR>
+                          <TD>地址池结束地址：</TD>
+                          <TD><INPUT class=text maxLength=15 name=ip2 size=15 
+                  value="<% =bbr->dhcps.pool_end %>"></TD>
+                        </TR>
+                        <TR>
+                          <TD>地址租期：</TD>
+                          <TD><INPUT class=text maxLength=4 name=lease size=4 
+                  value="<% =$bbr->dhcps.lease %>">
+&nbsp;分钟（1～2880分钟，缺省为120分钟）</TD>
+                        </TR>
+                        <TR>
+                          <TD>网关：</TD>
+                          <TD><INPUT class=text maxLength=15 name=gateway size=15
+                  value="<% =bbr->dhcps.default_gateway %>">
+                            （可选）</TD>
+                        </TR>
+                        <TR>
+                          <TD>缺省域名：</TD>
+                          <TD><INPUT class=text id=domain maxLength=30 name=domain size=15
+                  value="<% =bbr->dhcps.default_dsn %>">
+                            （可选）</TD>
+                        </TR>
+                        <TR>
+                          <TD>主DNS服务器：</TD>
+                          <TD><INPUT class=text maxLength=15 name=dnsserver size=15
+                  value="<% =bbr->dhcps.main_dsn_server %>">
+                            （可选）</TD>
+                        </TR>
+                        <TR>
+                          <TD>备用DNS服务器：</TD>
+                          <TD><INPUT class=text maxLength=15 name=dnsserver2 size=15
+                  value="<% =bbr->dhcps.backup_dsn_server %>">
+                            （可选）</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Submit name=Save onclick="return doSubmit();" type=submit value="保 存">
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

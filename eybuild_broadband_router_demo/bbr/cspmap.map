@@ -1,0 +1,14 @@
+# this file list how to map files to virtual directory
+#
+
+# source directory          virtual directory
+# ------------------        ------------------
+
+csp/*.csp             ==>     /
+csp/basic/*.csp       ==>     /basic/
+csp/security/*.csp    ==>     /security/
+csp/network/*.csp     ==>     /network/
+csp/route/*.csp       ==>     /route/
+csp/system/*.csp      ==>     /system/
+csp/nat/*.csp         ==>     /nat/
+csp/dhcp/*.csp        ==>     /dhcp/

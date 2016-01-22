@@ -1,0 +1,31 @@
+<html>
+<head>
+<META content=no-cache http-equiv=pragma>
+</head>
+<body>
+<% !!string		str = "This is a c++ string"; 
+   !!my_class 	my_var(100, str);
+%>
+<p>Output C variable:   <% =str.c_str() %></p>
+<p>Output C++ variable: <% =str %></p>
+<p>Print class: <% my_var.output(); %></p>
+</body>
+</html>
+
+<% @g
+// define a c++ class
+class my_class {
+	string		str;
+	int			var;
+public:
+	my_class(int v, string s) {
+		str = s;
+		var = v;
+	}
+	
+	int output() {
+		return print(var);
+	}
+};
+%>
+

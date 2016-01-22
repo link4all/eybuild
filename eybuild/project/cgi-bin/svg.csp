@@ -1,0 +1,30 @@
+#!/usr/bin/cspengine
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" 
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+
+<!-- 
+Control MIME header here.
+<% @mimeheader "Content-Type: image/svg+xml\n\n" %> 
+-->
+
+<!-- Box around the image -->
+<rect x="0" y="25" width="450" height="120"
+fill="none" stroke="blue" stroke-width="2" />
+
+<!-- Headers -->
+<text x="15" y="50">Home page</text>
+<text x="15" y="75">Product info</text>
+<text x="15" y="100">Contact us</text>
+<text x="15" y="125">Technical support</text>
+
+<!-- Chart elements -->
+<g fill="yellow" stroke="red" stroke-width="3">
+<rect x="150" y="40" height="15" width="273.993"/>
+<rect x="150" y="65" height="15" width="99.932"/>
+<rect x="150" y="90" height="15" width="3.228"/>
+<rect x="150" y="115" height="15" width="25.242"/>
+</g>
+
+</svg>

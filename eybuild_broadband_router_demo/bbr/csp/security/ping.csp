@@ -1,0 +1,96 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		bbr->disable_wan_ping = atoi(G("ping"));
+
+		save_bbr(bbr, errmsg);
+	}
+	
+%>
+<HTML>
+<HEAD>
+<TITLE>Other</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doSubmit(){
+return true;}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+width=7></TD>
+          <TD align=left class=title vAlign=center width=495>WAN口Ping</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD><TABLE border=0 cellPadding=0 cellSpacing=0 class=space 
+                  width=398>
+                              <TBODY>
+                              </TBODY>
+                            </TABLE>
+                            <TABLE border=0 cellPadding=0 cellSpacing=0 class=space 
+                  width=398>
+                              <TBODY>
+                                <TR>
+                                  <TD width=140>忽略来自WAN口的Ping：</TD>
+                                  <TD><% CHECK_BOX2("ping", "2", bbr->disable_wan_ping, "id=ping"); %></TD>
+                                </TR>
+                              </TBODY>
+                            </TABLE></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Submit name=Save type=submit value="保 存">
+&nbsp; &nbsp;</TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

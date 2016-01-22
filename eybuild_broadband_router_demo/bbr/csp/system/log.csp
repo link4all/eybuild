@@ -1,0 +1,132 @@
+<HTML>
+<HEAD>
+<TITLE>System Log</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=Javascript><!--
+function doSubmit(){
+if(confirm("确认清除所有日志内容吗？")){
+return true;}
+else {return false;}}
+function doClick(){
+location.href="<% =thisCgiPrefix() %>";}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post" onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=562 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD class=title vAlign=center align=left width=555>系统日志</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=562 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=560><TABLE class=space cellSpacing=0 cellPadding=0 width=520 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD noWrap align=left width=60>索引</TD>
+                          <TD align=middle>日 志 内 容</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=520 
+            align=center border=1>
+                      <TBODY>
+                        <TR>
+                          <TD align=middle width=20>1</TD>
+                          <TD><P align=left>&nbsp;0051:发送PADI,请求建立连接.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>2</TD>
+                          <TD><P align=left>&nbsp;0052:PPPOE请求连接超时.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>3</TD>
+                          <TD><P align=left>&nbsp;0062:PPPoE 开启自动连接.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>4</TD>
+                          <TD><P align=left>&nbsp;0062:发送PADI,请求建立连接.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>5</TD>
+                          <TD><P align=left>&nbsp;0062:接收PADT,服务端请求断开本次连接.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>6</TD>
+                          <TD><P align=left>&nbsp;0072:PPPoE 开启自动连接.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>7</TD>
+                          <TD><P align=left>&nbsp;0072:发送PADI,请求建立连接.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>8</TD>
+                          <TD><P 
+                  align=left>&nbsp;0072:接收PADO,AC-Name=YongAnERX1400,AC-MAC=00901A40BD81.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>9</TD>
+                          <TD><P align=left>&nbsp;0072:发送PADR.</P></TD>
+                        </TR>
+                        <TR>
+                          <TD align=middle width=20>10</TD>
+                          <TD><P 
+                  align=left>&nbsp;0072:接收PADS,Session-ID=0x1D79,AC-MAC=00901A40BD81.</P></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=520 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD align=left>&nbsp;Time = 2003-05-01 8:28:22 1702s</TD>
+                        </TR>
+                        <TR>
+                          <TD align=left>&nbsp;Mode = PPPoE : L = 192.168.1.1 : W = 221.229.229.163</TD>
+                        <TR>
+                          <TD align=left>&nbsp;H-Ver = bbr v1.0 100122BA : S-Ver = 3.1.0 Build 050226 Rel.36369na</TD>
+                        </TR>
+                        <TR>
+                          <TD align=left>&nbsp;Free=1008, Busy=16, Bind=14, Inv=0/6, Bc=0/0, Dns=107, cl=48, fc=0/0, sq=2/31</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <!--内容结束--></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30><DIV align=left>&nbsp;&nbsp;
+                      <INPUT class=button onclick=doClick(); type=button value="刷 新" name=Refresh>
+&nbsp;&nbsp;&nbsp;
+                      <INPUT class=button type=submit disabled value=清除所有日志 name=ClearLog>
+                    </DIV></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

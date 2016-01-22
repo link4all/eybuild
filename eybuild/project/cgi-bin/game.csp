@@ -1,0 +1,230 @@
+#!/usr/bin/cspengine
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<!-- 
+Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+
+MODFIED HISTORY
+---------------
+01a, 2006-7-26 	xxt replaced switch_case with following.
+01a, 2006-7-26 	newzy create for test eybuild/1.0 bata.
+-->
+</head>
+<body>
+<% {{
+@include <assert.h>
+
+char * result_list[] = {
+"传说中的尧舜时代 <br>\n\
+这是个美好和天真的时代，传说那时的人们都纯洁高尚、没有险恶的勾心斗角，大家\
+幸福地生活在一起。相应地，你是个充满梦想的孩子，不管实际年龄如何，至少现在\
+你的心理年龄很年轻，可能在18岁以下。你相信世界的美好，喜欢“从此王子和公主幸\
+福地生活在一起了 ”的结局，然而世界真的是你想象的那样子吗？",
+
+
+"战国时代 <br>\n\
+战国时代是一个比较复杂的时期，这一时期既充满战乱，又充满各种思想的火花，尽\
+管有许多残酷的事，但高尚与优雅在这一时期依然受到很强的推崇。你是个不安于现\
+状的人，过久的和平让你感到厌倦，也许偶尔你因此会被冠上“ 好战 ”的名号，但其\
+实你只是讨厌沉闷罢了。你有脱离现实和在意形式的一面，美丽的事物对你很有吸引\
+力。",
+
+"三国时代 <br>\n\
+比起同处战乱年代的战国时期来，这是一个更不择手段的年代。你喜欢竞争，好胜心\
+强，充沛的精力让你对各种有挑战性的事都很感兴趣。但与战国时代不同的是，和“美\
+” 这种抽象的东西相比你更注重现实，即使你是一个很道德的人，也不喜欢把道德挂\
+在嘴边，在你看来，能验证一切的只有行动。", 
+
+"魏晋时代 <br>\n\
+魏晋时代的特点之一是种种颓废的风气，由于经历的苦难太多，人们变得开始不相信\
+现实，感到在这无常的世界中，一切都是不可 *的。生活在这一时代的你，同样是个\
+喜欢怀疑的人，有时甚至怀疑自己的存在。你对世界持悲观的看法，现实对你来说常\
+常是令人悲哀和无能为力的。但这并不意味着你是个消沉的人，所谓绝望的顶点是乐\
+观，你只是比别人更清楚地看到了世界灰暗的一面而已。",
+
+"唐朝 <br>\n\
+唐朝是安定和繁荣的时代，无论文化还是财富都达到了太平盛世的顶峰。生活在这个\
+时代的你，内心也是安稳的，你喜欢平静的生活，个性温和成熟，具有较强的包容\
+心。你应该经历过一些小的苦恼，但却没有遭受过太大的打击，可以说你是个幸福的\
+人，也会给你身边的人带来幸福。",
+
+"五四时代 <br>\n\
+套用《双城记》里的那句话，这是个光明的年代，也是个黑暗的年代，我们的前方有\
+着一切，我们又一无所有。你或许正处在思想上的转变期，一些事让你对过去的自己\
+发生了怀疑，决定重新调整一下自己的生活方式。走过这段路之后，一切会变得更好\
+的。",
+
+"现代 <br>\n\
+你简直就是为我们的这个时代而生的！你并非不知道这世上有许多不尽人意之处，但\
+你能把它们作为生活的一部分来接受下来，这让你过得很好。你不喜欢纷争，也会尽\
+量避免不必要的纷争。尽管有些事依然会困扰你，但基本上说来你对现代社会里的种\
+种问题多数能应付的比较好，也懂得如何在这纷繁的世界里找到自己的位置，这说明\
+你是个成熟且适应力强的人。",
+
+"未来 <br>\n\
+如果你在做这套测试时做来做去总是回到同一道题目上，\
+那么你是个奇特的未来人……",
+};
+
+
+char * step_list[] =
+{
+"1、你对现在的自己基本满意吗？ <br>\n\
+A、是（去 2）<br>\n\
+B、否（去 7）<br>\n\
+",
+
+"2、喜欢战争题材的作品吗？<br>\n\
+A、很喜欢（去7）<br>\n\
+B、否或一般（去3）<br>\n\
+",
+
+"3、有过强烈的无奈感、发觉生活中有些事是不得不接受的吗？<br>\n\
+A、是（去5）<br>\n\
+B、否（去 4）<br>\n\
+",
+
+"4、相信善有善报、等价交换的说法？<br>\n\
+A、是（答案 A）<br>\n\
+B、否（去 5）<br>\n\
+",
+
+"5、你的自我保护意识很强吗？<br>\n\
+A、是（去8）<br>\n\
+B、否（去6）<br>\n\
+",
+
+"6、比起游乐场来更喜欢名胜古迹？<br>\n\
+A、是（答案E）<br>\n\
+B、否（去8）<br>\n\
+",
+
+"7、更喜欢对抗类的比赛（如篮球、击剑）还是轻松的运动（如游泳、散步）？<br>\n\
+A、对抗类的比赛（去12）<br>\n\
+B、轻松的运动（去3）<br>\n\
+",
+
+"8、你是个喜欢质疑现实的人吗？<br>\n\
+A、是（去10）<br>\n\
+B、否（去 9）<br>\n\
+",
+
+"9、最近经常有迷茫的感觉吗？<br>\n\
+A、是（去10）<br>\n\
+B、否（答案G）<br>\n\
+",
+
+"10、你相信只要努力改变自己，自己以后会成为一个更出色的人吗？<br>\n\
+A、是（答案F）<br>\n\
+B、否（去11）<br>\n\
+",
+
+"11、偶尔会觉得一切都是虚幻？<br>\n\
+A、是（答案D）<br>\n\
+B、否（答案 G）<br>\n\
+",
+
+"12、有人说过你太理想主义了吗？<br>\n\
+A、是（去13）<br>\n\
+B、否（去14）<br>\n\
+",
+
+"13、“ 肮脏 ”这个词比“ 罪恶 ”更让你讨厌？<br>\n\
+A、是（答案 B）<br>\n\
+B、否（去 14）<br>\n\
+",
+
+"14、混乱对你来说意味着什么？<br>\n\
+A、可怕（去3）<br>\n\
+B、机会（答案C）<br>\n\
+",
+};
+
+/* xxt add */
+char  hash_goto[][2] =
+{
+	{2, 7}, {7, 3}, {5, 4}, {'A', 5}, {8, 6}, 
+	{'E', 8}, {12, 3}, {10, 9}, {10, 'G'}, {'F', 11}, 
+	{'D', 'G'}, {13, 14}, {'B', 14}, {3, 'C'}
+};
+#define DO_BRANCH(stepA, stepB)	\
+		('A' == choose) ? (stepA) : (stepB)
+#define GO(s)		step = (s)
+
+	char *		pmsg = NULL;
+	int			len;
+	char		choose;
+	int			ret = -1;
+	int 		step = 1;
+	
+	/* init step */
+	step = atoi(getParameter("step"));
+	if (step<1 || step>14)
+		step = 1;
+	
+	/* get choose */
+	choose = getParameter("choose")[0];
+	if ('A' == choose || 'B' == choose)
+	{
+		/* xxt replaced switch_case with following */
+		DO_BRANCH( GO( hash_goto[step-1][0] ), 
+				   GO( hash_goto[step-1][1] ) );
+	}
+	
+	/* submit reset */
+	if (!isblankstr(getParameter("reset")))
+		step = 1;
+	
+	/* decide what to show */
+	if (step >= 'A')
+	{
+	    len = 500;
+		pmsg = result_list[step-'A'];
+	}
+	else
+	{
+		pmsg = step_list[step-1];
+		len = strcspn(pmsg, "\n");
+	}
+%>
+
+<script language=JavaScript type="text/javascript">
+<!--
+function enable_next(myform) {
+	myform.submit.disabled = false;
+}
+-->
+</script>
+<table border=1 align=center width=500>
+  <tr><td>
+  	<% =%.*s, len, pmsg %>
+  	
+  	<form name=myform action="<% =thisCgiPrefix() %>" method=post>
+  	<% if (step < 'A' ) { %>
+  		<input type="hidden" name=step value="<% =$step %>">
+  				
+  		<p>
+  		<input type="radio" value="A" name=choose onclick="enable_next(myform)"> <% =%.*s, len=strcspn(pmsg, "\n"), pmsg+=len+1 %></option>
+  		<input type="radio" value="B" name=choose onclick="enable_next(myform)"> <% =%s, pmsg+len %></option><br>
+  		</p>
+  		
+	  	<hr>
+  		<p align=center>
+  		<input type="submit" name=submit value=" 下一步 " disabled>&nbsp;&nbsp;
+  		<input type="submit" name=reset value=" 重新开始 " <% =(1==step) ? "disabled": "" %>>
+  		</p>
+	<% } else { %>
+  		<p align=center>
+  		<input type="submit" name=reset value=" 再来一次 ">
+  		<input type="hidden" name=mark value="0101">  		
+  		</p>
+  	<% } %>
+  		<input type="hidden" name=mark value="0101">  		
+  	</form>
+  </td></tr>
+</table>
+<% }} %>
+</body>
+</html> 
+

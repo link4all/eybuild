@@ -1,0 +1,197 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		bbr->pppoe.mtu = atoi(G("lcpMru"));
+		BUFCPY(bbr->pppoe.server_name, G("ServiceName"));
+		BUFCPY(bbr->pppoe.service_name, G("AcName"));
+		bbr->pppoe.use_isp_ip = !strcmp(G("fixedIpEn"), "2");
+		bbr->pppoe.interval = atoi(G("EchoReq"));
+		bbr->pppoe.manual_set_dns = !strcmp(G("manual"), "2");
+		if (bbr->pppoe.use_isp_ip)
+			BUFCPY(bbr->pppoe.isp_ip, G("fixedIp"));
+		if (bbr->pppoe.manual_set_dns)
+		{
+			BUFCPY(bbr->dhcps.main_dsn_server, G("dnsserver"));
+			BUFCPY(bbr->dhcps.backup_dsn_server, G("dnsserver2"));
+		}
+		
+		save_bbr(bbr, errmsg);
+	}
+%>
+
+<HTML>
+<HEAD>
+<TITLE>pppoecfg</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doPrev(){history.go(-1);}
+function doBack(){location.href="<% =cgiPrefix(NULL) %>/network/wan_setting.csp";}
+function doSubmit(){
+if(document.forms[0].lcpMru.value>1492 || document.forms[0].lcpMru.value<576)
+
+{alert("数据包的MTU值已超出范围，请重新输入(576 - 1492)！"); return false;}
+
+if(!is_number(document.forms[0].EchoReq.value,0,120)){
+	alert("时间输入错误，请重新输入（0－120）！");
+	
+	var element =document.forms[0].EchoReq;
+	if(element){element.focus();element.select();}
+	return false;
+}	
+
+if(document.forms[0].manual.checked){
+if(!is_dnsaddr(document.forms[0].dnsserver.value)){
+var element =document.forms[0].dnsserver;
+if(element){element.focus();element.select();}
+return false;}
+if(document.forms[0].dnsserver2.value != ""){
+if(!is_dnsaddr(document.forms[0].dnsserver2.value)){
+var element =document.forms[0].dnsserver2;
+if(element){element.focus();element.select();}
+return false;}}}
+return true;}
+function doSet1(){if(document.forms[0].fixedIpEn.checked){
+document.forms[0].fixedIp.disabled=false;}
+else{document.forms[0].fixedIp.disabled=true;}return true;}
+function doSet(){if(document.forms[0].manual.checked){
+document.forms[0].dnsserver.disabled = false;
+document.forms[0].dnsserver2.disabled = false;}
+else{document.forms[0].dnsserver.disabled = true;
+document.forms[0].dnsserver2.disabled = true;}return true;}
+function doLoad(){
+if(document.forms[0].manual.checked){
+document.forms[0].dnsserver.disabled = false;
+document.forms[0].dnsserver2.disabled = false;}
+else{document.forms[0].dnsserver.disabled = true;
+document.forms[0].dnsserver2.disabled = true;}
+if(document.forms[0].fixedIpEn.checked)
+{document.forms[0].fixedIp.disabled=false;}
+else {document.forms[0].fixedIp.disabled=true;}
+return true;}
+//--></SCRIPT>
+</HEAD>
+<BODY onload=doLoad();>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>"  method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+      
+      <TR>
+        <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+        <TD align=left class=title vAlign=center width=495>PPPoE高级设置</TD>
+      </TR>
+      <TR>
+        <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+            <TBODY>
+            
+            <TR>
+            
+            <TD class=vline rowSpan=15><BR></TD>
+            <TD width=500><TABLE align=center border=0 class=space width=460>
+                <TBODY>
+                  <TR>
+                  <TR>
+                    <TD height=36>数据包MTU ：</TD>
+                    <TD><INPUT class=text id=lcpMru maxLength=4 name=lcpMru size=4 
+                      value="<% =$bbr->pppoe.mtu %>">
+                      （缺省值为1492，如非必要，请勿更改）</TD>
+                  </TR>
+                  <TR>
+                    <TD>服务名 ：</TD>
+                    <TD><INPUT class=text maxLength=31 name=ServiceName size=15
+                      value="<% =bbr->pppoe.server_name %>">
+                      （即Service Name。如非必要，请勿填写）</TD>
+                  </TR>
+                  <TR>
+                    <TD>服务器名称：</TD>
+                    <TD><INPUT class=text maxLength=31 name=AcName size=15
+                      value="<% =bbr->pppoe.service_name %>">
+                      （即AC Name。如非必要，请勿填写）</TD>
+                  </TR>
+                  <TR>
+                    <TD colSpan=2>
+                      <% CHECK_BOX2("fixedIpEn", "2", bbr->pppoe.use_isp_ip, "onclick=doSet1();"); %>
+                      使用ISP指定IP地址</TD>
+                  </TR>
+                  <TR>
+                    <TD>ISP指定的IP地址：</TD>
+                    <TD><INPUT class=text maxLength=15 name=fixedIp size=15
+                      value="<% =bbr->pppoe.isp_ip %>">
+                    </TD>
+                  <TR>
+                    <TD height=30>在线检测时间间隔：</TD>
+                    <TD><INPUT class=text maxLength=3 name=EchoReq size=3 
+                      value="<% =$bbr->pppoe.interval %>">
+                      秒 （0～120，0 表示不发送）</TD>
+                  </TR>
+                </TR>
+                
+                <TR>
+                  <TD colSpan=2>
+                    <% CHECK_BOX2("manual", "2", bbr->pppoe.manual_set_dns, "id=manual onclick=doSet();"); %>
+                    手动设置DNS服务器</TD>
+                </TR>
+                <TR>
+                  <TD>DNS服务器：</TD>
+                  <TD><INPUT class=text id=dnsserver maxLength=15 name=dnsserver size=15 
+                      value="<% =bbr->dhcps.main_dsn_server %>">
+                  </TD>
+                </TR>
+                <TR>
+                  <TD height=23>备用DNS服务器：</TD>
+                  <TD><INPUT class=text id=dnsserver2 maxLength=15 name=dnsserver2 size=15 
+                      value="<% =bbr->dhcps.backup_dsn_server %>">
+                    （可选）</TD>
+                </TR>
+                </TBODY>
+              </TABLE>
+              <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=460>
+                <INPUT class=button name=back onclick=doBack(); type=button value="返 回">
+&nbsp;
+                <INPUT name=Advanced type=hidden value=高级设置>
+                <TBODY>
+                </TBODY>
+              </TABLE></TD>
+            <TD class=vline rowSpan=15><BR></TD>
+            </TR>
+            <TR>
+              <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+            </TR>
+            <TR>
+              <TD class=tail height=30>&nbsp;
+                <INPUT class=button id=save name=Save type=submit value="保 存">
+&nbsp; </TD>
+            </TR>
+            <TR>
+              <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+            </TR>
+            </TBODY>
+          </TABLE></TD>
+      </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

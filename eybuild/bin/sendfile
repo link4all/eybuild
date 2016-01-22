@@ -1,0 +1,76 @@
+#!/bin/bash
+# 
+# Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+#
+# 01b, 2006-11-22   newzy add target [ip] in echo info 
+# 01b, 2006-11-14   newzy add help for V1.0 
+# 01a, 2003-11-13   Ljy create
+#
+
+sendfile=${0##*/}
+version=1.0
+
+help ()
+{
+    echo "$sendfile($version) - Send file to specifical ftp server."
+    echo "Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved."
+    echo
+    echo "Usage: $sendfile lname rname [[\"][options] ip[\"]] [user] [passwd]"
+    echo "  lname       - local filename"
+    echo "  rname       - remote filename"
+    echo "  ip          - ftp server ip, default get from "'$SENDFILE_IP'
+    echo "  user        - ftp username, default get from "'$SENDFILE_USER'
+    echo "  passwd      - ftp password, default get from "'$SENDFILE_PASSWORD'
+    echo
+    echo 'If you often send files to one FTP server, you can add "$SENDFILE_IP"',
+    echo '"$SENDFILE_USER" and "$SENDFILE_PASSWORD" to your environment variable'
+    echo
+    echo "Example:"
+    echo "  $sendfile xx.cgi yy.cgi 192.168.0.1"
+    echo
+    exit 1;
+}
+
+if [ -z "$2" ]; then
+    help
+fi
+
+lname=$1
+rname=$2
+ftpserver=$3
+username=$4
+password=$5
+
+# set default value
+if [ -z "$ftpserver" ]; then
+    ftpserver=$SENDFILE_IP
+fi
+if [ -z "$username" ]; then
+    username=$SENDFILE_USER
+fi
+if [ -z "$password" ]; then
+    password=$SENDFILE_PASSWORD
+fi
+
+# check defalut value
+#echo default: $password, $username, $ftpserver
+if [ -z "$password" ] || [ -z "$username" ] || [ -z "$ftpserver" ]; then
+    help
+fi
+
+#echo default: $password, $username, $ftpserver
+if [ -z "$password" ] || [ -z "$username" ] || [ -z "$ftpserver" ]; then
+    help 
+fi
+
+# login ftp server and send file
+echo "Sending file '$lname' to [$ftpserver]'$rname'..."
+(
+    echo user $username $password
+    echo bin
+    echo put $lname $rname
+    # echo ls
+    echo quit
+) | ftp -i -n $ftpserver
+
+

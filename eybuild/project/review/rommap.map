@@ -1,0 +1,8 @@
+# this file list how to map files to virtual directory
+#
+
+# source directory          virtual directory
+# ------------------        ------------------
+
+# img/*.*             ==>     /img/
+

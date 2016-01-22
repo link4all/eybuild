@@ -1,0 +1,10 @@
+# this file list how to map files to virtual directory
+#
+
+# source directory          virtual directory
+# ------------------        ------------------
+
+# csp/rom/*.jpg           ==> /rom/
+# csp/rom/*.gif           ==> /rom/
+# csp/rom/*.css           ==> /rom/
+    

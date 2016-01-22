@@ -1,0 +1,198 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	load_bbr(bbr, errmsg);
+%>
+
+<HTML>
+<HEAD>
+<TITLE>Status</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript><!--
+function doRefresh()
+{location.href="<% =thisCgiPrefix() %>"; return true;}
+function doConnect()
+{location.href="<% =thisCgiPrefix() %>&Connect=连 接";return true;}
+function doDisConnect()
+{location.href="<% =thisCgiPrefix() %>&Disconnect=断 线";return true;}
+function doRenew()
+{location.href="<% =thisCgiPrefix() %>&RenewIp=更新";return true;}
+function doRelease()
+{location.href="<% =thisCgiPrefix() %>&ReleaseIp=释放";return true;}
+function doLogin()
+{location.href="<% =thisCgiPrefix() %>&Login=登录";return true;}
+function doLogout()
+{location.href="<% =thisCgiPrefix() %>&Logout=退出";return true;}
+window.setTimeout("doRefresh()",20000);
+--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+    width=7></TD>
+          <TD align=left class=title vAlign=center width=495>LAN口状态</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=420>
+                      <TBODY>
+                        <TR>
+                          <TD width=80>MAC地址：</TD>
+                          <TD width=320><% =bbr->mac.lan_mac %></TD>
+                        </TR>
+                        <TR>
+                          <TD>IP 地址：</TD>
+                          <TD><% =bbr->lan.ip %></TD>
+                        </TR>
+                        <TR>
+                          <TD>子网掩码：</TD>
+                          <TD><% =bbr->lan.ipmask %></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15 width=1><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 class=space width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+    width=7></TD>
+          <TD align=left class=title vAlign=center width=495>WAN口状态</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15 width=1><BR></TD>
+                  <TD height=50 width=500><TABLE align=center border=0 class=space width=400>
+                      <TBODY>
+                        <TR>
+                          <TD width=80>MAC地址：</TD>
+                          <TD width=140><% =bbr->mac.wan_mac %></TD>
+                          <TD width=171>&nbsp;</TD>
+                        </TR>
+                        <TR>
+                          <TD>IP 地址：</TD>
+                          <TD><% =bbr->wan.ip %></TD>
+                          <TD>PPPoE</TD>
+                        </TR>
+                        <TR>
+                          <TD>子网掩码：</TD>
+                          <TD><% =bbr->wan.ipmask %></TD>
+                          <TD>&nbsp;</TD>
+                        </TR>
+                        <TR>
+                          <TD>网关：</TD>
+                          <TD><% =bbr->wan.gateway %></TD>
+                          <TD></TD>
+                        </TR>
+                        <TR>
+                          <TD>DNS服务器：</TD>
+                          <TD colSpan=2><% =bbr->dhcps.main_dsn_server %>, <% =bbr->dhcps.backup_dsn_server %></TD>
+                        </TR>
+                        <TR>
+                          <TD>上网时间：</TD>
+                          0<TD>0 天 00:00:00</TD>
+                          <TD><DIV align=center>
+                              <INPUT class=button id=Disconnect name=Disconnect onclick="return doDisConnect();" type=button value="断 线">
+                            </DIV></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15 width=1><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <TABLE border=0 cellPadding=0 cellSpacing=0 class=space width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+    width=7></TD>
+          <TD align=left class=title vAlign=center width=495>WAN口流量统计</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15 width=1><BR></TD>
+                  <TD height=50 width=500><TABLE align=center border=0 class=space width=400>
+                      <TBODY>
+                        <TR>
+                          <TD width=138>&nbsp;</TD>
+                          <TD width=138>接收</TD>
+                          <TD width=110>发送</TD>
+                        </TR>
+                        <TR>
+                          <TD>字节数：</TD>
+                          <TD><% =$565973618 %></TD>
+                          <TD><% =$753052564 %></TD>
+                        </TR>
+                        <TR>
+                          <TD>数据包数：</TD>
+                          <TD><% =$21928665 %></TD>
+                          <TD><% =$11652569 %></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15 width=1><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <TABLE border=0 width=500>
+      <TBODY>
+        <TR>
+          <TD><TABLE align=center border=0 width=400>
+              <TBODY>
+                <TR>
+                  <TD width=138>运行时间：</TD>
+                  <TD width=134>0 天 00:00:00</TD>
+                  <TD align=middle width=115><INPUT class=button id=Refresh name=Refresh onclick="return doRefresh();" type=button value="刷 新"></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>
+

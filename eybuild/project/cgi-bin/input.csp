@@ -1,0 +1,21 @@
+#!/usr/bin/cspengine
+<html>
+<head>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<% if (!isblankstr(G("textbox"))) { %>
+<script language=JavaScript>
+<!-- 
+    alert("你输入的是: " + "<% =G("textbox") %>");
+    location.href = "<% =thisCgiPrefix() %>try=true";
+-->
+</script>
+<% } %>
+</head>
+<body>
+<form method=post action="<% =thisCgiPrefix() %>" method=post>
+	请您<% =!strcmp("true", G("try")) ? "再次": "" %>输入: <input type=text name=textbox><p>
+	<input type=submit name=submit value="提交"><br>
+</form>
+</body>
+</html>
+

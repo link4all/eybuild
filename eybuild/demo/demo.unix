@@ -1,0 +1,16 @@
+#!/bin/bash
+# @echo off
+
+#########################################################
+DEST_DIR=cspsrc
+
+CSP_MAPFILE=cspmap.map
+CSP_MAPLIST=demo_csp_maplist
+ROM_MAPFILE=rommap.map
+ROM_MAPLIST=demo_rom_maplist
+#########################################################
+
+# REM convert file
+$EYBUILD_BASE/bin/donemap.unix $DEST_DIR $CSP_MAPFILE $CSP_MAPLIST $ROM_MAPFILE $ROM_MAPLIST
+
+

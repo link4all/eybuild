@@ -1,0 +1,34 @@
+
+<HTML>
+<HEAD>
+<TITLE>留言本--退出</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<STYLE>P {
+	size: 6pt
+}
+.title {
+	COLOR: #ffb6c1
+}
+</STYLE>
+<% {{
+	@include <login.h>
+	extern int review_count;
+	
+	/* login OK */
+	if (do_logout() >= 0)
+		return OK;
+%>
+</HEAD>
+<BODY>
+<P><SPAN class=title>
+<CENTER>
+<H1>留 言 本</H1> [FastCGI 访问计数: <% =$++review_count %>]
+</CENTER></SPAN>
+<FORM action=<% =cgiPrefix2(NULL, "/review/logout.csp") %> method=post>
+	<CENTER>
+	<P><INPUT type=submit name=logout value="退 出"> 
+	</CENTER>
+</FORM>
+<% }} %>
+</BODY>
+</HTML>

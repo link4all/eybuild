@@ -1,0 +1,75 @@
+<html>
+<% {{
+	char *	title = "关于 eyBuild 综合演示程序";
+%>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=GB2312">
+	<title><% =title %></title>
+</head>
+<body>
+	来自: http://www.eybuild.com<br>
+	<font color=red><h3><% =title %></h3></font>
+	<br>
+	本程序包用于演示 eybuild/CSP 生成的 CGI 程序的执行.<br>
+	<p>
+	============<br>
+	<font color=red size=3>示例说明:</font><br>
+	============<br>
+	<% { 
+	char 		pwd[256] = "";
+	
+	_getcwd(pwd, sizeof(pwd));
+	%>
+	<table>
+	<tr><td width=250><a href=/cgi-bin/demo.cgi target=__blank><% =pwd %>\demo.cgi</a>
+		<td>一个最小的交互程序测试程序
+	<tr><td><a href=/cgi-bin/review.cgi target=__blank><% =pwd %>\review.cgi</a>
+		<td>一个简单的留言簿程序
+	<tr><td><a href=/cgi-bin/rweb.cgi target=__blank><% =pwd %>\rweb.cgi</a>
+		<td>远程WEB文件管理器, 可以自由浏览下载/上传文件
+	<tr><td><a href=/cgi-bin/fr40.cgi target=__blank><% =pwd %>\Fr40.cgi</a>
+		<td>是一个路由器的管理界面, 嵌入式应用的一个示例
+	</table>
+	<p>
+	<% } %>
+	============<br>
+	<font color=red size=3>运行步骤:</font><br>
+	============<br>
+	1. 解压到任意目录<br>
+	2. 运行WEB 服务器 webs.exe <br>
+	3. 从浏览器上输入或直接点击下面的CGI的地址:<br>
+	<% {
+	@include <undef.h>
+	@include <windows.h>
+	@include <direct.h>
+	@include <ebdef.h>
+	@include <ebio.h>
+		
+	    WIN32_FIND_DATA	wfd;
+	    HANDLE			hfind = FindFirstFile("*.cgi", &wfd);
+	
+		if (INVALID_HANDLE_VALUE != hfind) {
+			do {
+				if (!(wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+				{
+	%>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href=<% =wfd.cFileName%> target=__blank>http://127.0.0.1/cgi-bin/<% =wfd.cFileName%></a><br>
+	<%			}
+			} while (FindNextFile(hfind, &wfd));
+		} /* if */
+	}
+	}}
+	%>
+	<p>
+	============<br>
+	<font color=red size=3>关于WEB服务器:</font><br>
+	============<br>
+	<font color=red>如果你已经安装了 WEB 服务器(如Apache/IIS等), <br>
+	可以将 cgi-bin 目录中文件, 拷贝到相应的CGI目录中运行CGI演示程序</font><p>
+
+	为了便于演示 CSP CGI程序, eyBuild Group 修改了开源的 GoAhead Web 服务器(Windows版)<br>
+	打开WEB 服务器后, 直接从浏览器上输入同目录下 cgi-bin 目录中的文件名,<br>
+	即可打开示例程序.<P>
+<body>
+</html>

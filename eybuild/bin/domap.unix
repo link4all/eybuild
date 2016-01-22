@@ -1,0 +1,29 @@
+#!/bin/bash
+# donemap.bat - script for compile csp files and rom files
+#
+# Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+#
+# modification history
+# --------------------
+# 01c, 2006-5-30 newzy  customize as default for all project 
+# 01b, 2006-3-23 newzy  add get current directory
+# 01a, 2006-2-15 newzy  create
+#
+
+# get current directory
+curdir=$1
+
+#########################################################
+DEST_DIR=$curdir/../cspsrc
+
+CSP_MAPFILE=$curdir/../cspmap.map
+CSP_MAPLIST=csp_maplist
+ROM_MAPFILE=$curdir/../rommap.map
+ROM_MAPLIST=rom_maplist
+#########################################################
+
+# REM convert file
+$EYBUILD_BASE/bin/donemap.unix $DEST_DIR $CSP_MAPFILE \
+		$CSP_MAPLIST $ROM_MAPFILE $ROM_MAPLIST $curdir $2 $3 $4 -l
+
+

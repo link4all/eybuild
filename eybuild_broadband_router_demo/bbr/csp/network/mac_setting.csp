@@ -1,0 +1,135 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		BUFCPY(bbr->mac.wan_mac, G("mac"));
+		
+		save_bbr(bbr, errmsg);
+	} else if (!isblankstr(G("restore"))) {
+		BUFCPY(bbr->mac.wan_mac, G("defaultMac"));
+		
+		save_bbr(bbr, errmsg);
+	}
+	
+%>
+
+<HTML>
+<HEAD>
+<TITLE>mac</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doRestore(){document.forms[0].mac.value=document.forms[0].defaultMac.value;}
+function doClone(){document.forms[0].mac.value = document.forms[0].pcmac.value;return true;}
+function is_spmac(mac_string){
+if(mac_string == "00-00-00-00-00-00"){
+alert("无效MAC地址，请重新输入！");
+return false;}
+var ch = "Ff-";
+for (var i = 0; i < mac_string.length; i++){
+c = mac_string.charAt(i);
+if(ch.indexOf(c) == -1)return true;}
+alert("无效MAC地址，请重新输入！");
+return false;}
+function doSubmit(){	
+if(!is_macaddr(document.forms[0].mac.value)){	
+var element = document.forms[0].mac;
+if(element){element.focus();element.select();}
+return false;}
+if(!is_spmac(document.forms[0].mac.value)){
+var element = document.forms[0].mac;
+if(element){element.focus();element.select();}
+return false;}
+if(!confirm("此功能需重启后才能生效，确定现在重启路由器？"))
+return false;else return true;}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>"  method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD align=left class=title vAlign=center width=495>MAC地址克隆</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置路由器对广域网的MAC地址。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 class=space width=400>
+                      <TBODY>
+                        <TR>
+                          <TD width=136>MAC地址：</TD>
+                          <TD width=264><INPUT class=text id=mac maxLength=17 name=mac 
+                  size=18 value="<% =bbr->mac.wan_mac %>">
+&nbsp;
+                            <INPUT class=button id=restore name=restore onclick=doRestore(); type=button value=恢复出厂MAC></TD>
+                        </TR>
+                        <TR>
+                          <TD>当前管理PC的MAC地址：</TD>
+                          <TD><INPUT class=text disabled id=pcmac maxLength=17 
+                  name=pcmac size=18 value="<% =bbr->mac.pc_mac %>">
+&nbsp;
+                            <INPUT class=button disabled id=clone name=clone onclick=doClone(); type=button value=克隆MAC地址>
+                            <INPUT name=defaultMac type=hidden value="<% =FACTORY_WAN_MAC %>"></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>注意：只有局域网中的计算机能使用“克隆MAC地址”功能。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=save name=Save type=submit value="保 存">
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+        width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

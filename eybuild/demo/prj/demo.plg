@@ -1,0 +1,41 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: demo - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\NEWZY~1.NEW\LOCALS~1\Temp\RSP49.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "E:\eybuild/include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/demo.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"E:\eybuild\demo\prj\demo.c"
+"E:\eybuild\demo\cspsrc\demo_csp_maplist.c"
+"E:\eybuild\demo\cspsrc\demo_rom_maplist.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\NEWZY~1.NEW\LOCALS~1\Temp\RSP49.tmp" 
+Creating temporary file "C:\DOCUME~1\NEWZY~1.NEW\LOCALS~1\Temp\RSP4A.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib E:\eybuild/lib/eybuild.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/dm.pdb" /debug /machine:I386 /out:"f:\website\cgi-bin\dm.cgi" /pdbtype:sept 
+.\Debug\demo.obj
+.\Debug\demo_csp_maplist.obj
+.\Debug\demo_rom_maplist.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\NEWZY~1.NEW\LOCALS~1\Temp\RSP4A.tmp"
+<h3>Output Window</h3>
+Compiling...
+demo.c
+demo_csp_maplist.c
+demo_rom_maplist.c
+Linking...
+Creating command line "bscmake.exe /nologo /o"Debug/demo.bsc"  .\Debug\demo.sbr .\Debug\demo_csp_maplist.sbr .\Debug\demo_rom_maplist.sbr"
+Creating browse info file...
+<h3>Output Window</h3>
+
+
+
+<h3>Results</h3>
+dm.cgi - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

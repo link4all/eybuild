@@ -1,0 +1,71 @@
+<HTML><HEAD><TITLE>留言本</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<STYLE>P {
+	size: 6pt
+}
+.title {
+	COLOR: #ffb6c1
+}
+</STYLE>
+<% {{
+	@include <login.h>
+	extern int review_count;
+	USR_STAT * 	pusr = get_usrstat();
+%>
+</HEAD>
+<BODY>
+<P><SPAN class=title>
+<CENTER>
+<H1>留 言 本</H1> [FastCGI 访问计数: <% =$++review_count %>] | 
+	[<a href="<% =cgiPrefix2(NULL, "/review/logout.csp") %>">注销登录</A>]
+</CENTER></SPAN>
+<P>
+<CENTER>
+<TABLE style="FONT-SIZE: 9pt" cellSpacing=0 borderColorDark=#ffffff 
+cellPadding=0 width=650 borderColorLight=#c0c0c0 border=1>
+  <TBODY>
+<% 
+@include "../usr/db.h"
+{
+	RECORD	record;
+	void *	fp;
+
+	fp = open_db("rb+");
+	
+	while(1) 
+	{
+		if (db_read_next(fp, &record) <= 0)
+			break;
+%>
+  <TR bgColor=#dadada height=20>
+    <TD>作者: <% =record.name %> </TD>
+    <TD>性别: <% =record.sex %> </TD>
+    <TD>邮件: <% =record.mail %> </TD>
+    <TD>时间: <% =record.now %></TD></TR>
+  <TR height=50>
+    <TD colSpan=4 width=650><% = htmlEncode(record.msg) %></TD></TR>
+<%
+	} /* for */
+	
+	close_db(fp);
+}
+%>
+</TBODY>
+</TABLE>
+</CENTER>
+<P>
+<FORM action=<% =cgiPrefix2(NULL, "/review/store.csp") %> method=post>
+	<CENTER>
+	<P>姓名： <INPUT name=name value=<% =pusr->name %>> 
+	<P>性别： <INPUT type=radio value=0 name=sex <% =!strcmp("female", pusr->sex) ? "checked": "" %>>女性 
+			  <INPUT type=radio value=1 name=sex <% =!strcmp("male", pusr->sex) ? "checked": "" %>>男性 
+	<P>EMail：<INPUT name=email type＝?Text? value="<% =pusr->mail %>"> 
+	<P>我要留言：</P><TEXTAREA name=content rows=10 cols=95></TEXTAREA> 
+	<P><INPUT type=submit value="发 表"> 
+	
+	<INPUT type=reset value=清除重写></P>
+	</CENTER>
+</FORM>
+<% }} %>
+</BODY>
+</HTML>

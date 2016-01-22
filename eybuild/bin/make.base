@@ -1,0 +1,98 @@
+# 
+# make.base - basic rules for complile CSP projects
+# 
+# Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+#
+# 01e, 2006-5-12  newzy add depend
+# 01d, 2006-4-11  newzy add support FastCGI
+# 01c, 2006-3-23  newzy add get current directory
+# 01b, 2006-3-22  newzy change directory
+# 01a, 2006-2-15  newzy create
+#
+
+# FastCGI Support Option
+# HAVE_FASTCGI	= TRUE
+
+TARGET_FILE		= demo.cgi 
+FASTCGI_LIB 	= /usr/local/lib/libfcgi.a
+CGI_TARGET_PATH	= .
+FCGI_TARGET_PATH= .
+
+SRCBASE	= ..
+SRCS	= $(SRCBASE)/cgimain.c \
+		  $(SRCBASE)/cspsrc/csp_maplist.c \
+	 	  $(SRCBASE)/cspsrc/rom_maplist.c
+
+MAKEFILE= Makefile
+SED 	= sed
+RM		= rm -r -f
+CC		= gcc
+CFLAGS	= -g -I$(EYBUILD_BASE)/include 
+LDFLAGS	= 
+LIBS	= 
+
+-include ../cspsrc/.csp_maplist
+
+OBJS 	= $(notdir $(subst .c,.o,$(SRCS)))
+
+ifneq (TRUE, $(findstring TRUE, $(HAVE_FASTCGI)))
+	TARGET		= $(CGI_TARGET_PATH)/$(TARGET_FILE)
+else
+	TARGET		= $(FCGI_TARGET_PATH)/$(patsubst %.cgi,%.fcgi, $(TARGET_FILE)) 
+endif
+
+# support FastCGI
+ifeq (TRUE, $(findstring TRUE, $(HAVE_FASTCGI)))
+	CFLAGS	+= -DHAVE_FASTCGI
+	LIBS	+= $(EYBUILD_BASE)/lib/fastcgi/eybuildlib $(FASTCGI_LIB)
+else
+	LIBS	+= $(EYBUILD_BASE)/lib/eybuildlib 
+endif
+
+
+.SILENT:
+default:
+	@./domap.unix
+	$(MAKE) -f $(MAKEFILE) .depend
+	@echo "########## Create '$(TARGET)' ##########"
+	$(MAKE) -f $(MAKEFILE) $(TARGET) 
+	@echo Create OK!
+
+$(TARGET): $(OBJS)
+	@$(CC) -o $(TARGET) $(OBJS) $(LIBS)
+
+all:
+	@chmod +x domap.unix
+	$(MAKE) clean 
+	$(MAKE) default 
+	@echo
+
+-include .depend
+depend:
+	$(MAKE) -f $(MAKEFILE) .depend
+
+.depend::
+	-@$(RM) $@
+	-@for file in `echo $(SRCS) | $(SED) 's/[^ ]*\.s//g'` ; \
+	do ( \
+		basename $$file | $(SED) 's/\.c/.o: $(MAKEFILE)/' >> $@; \
+		$(CC) -M $(CFLAGS) -c $$file >> $@ ; \
+		echo "	@echo Compile $$<..." >> $@; \
+		echo "	$(CC) $(CFLAGS) -c $$file" >>$@; \
+	) done
+
+
+clean:
+	@echo clean target files...
+	@$(RM) *.o
+	@$(RM) .depend 
+	@if [ -f $(TARGET) ];	then \
+		$(RM) $(TARGET); \
+	fi
+	@if [ -f "../cspsrc/csp_maplist.c" ];   then \
+		$(RM) ../cspsrc/.csp_maplist; \
+		$(RM) ../cspsrc/csp_maplist.c; \
+		$(RM) ../cspsrc/rom_maplist.c; \
+		$(RM) ../cspsrc/csp_p; \
+	fi
+

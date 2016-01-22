@@ -1,0 +1,194 @@
+# 
+# Copyright(C) eyBuild Group, 2005, 2006. All Rights Reserved.
+#
+# 01h, 2006-10-17 newzy add make strip
+# 01g, 2006-7-25  newzy add MAKE_PRE_RULE, MAKE_POST_RULE
+# 01f, 2006-5-15  newzy separate make.rule from Makefile
+# 01e, 2006-5-12  newzy add depend
+# 01d, 2006-4-11  newzy add support FastCGI
+# 01c, 2006-3-23  newzy add get current directory
+# 01b, 2006-3-22  newzy change directory
+# 01a, 2006-2-15  newzy create
+#
+
+#
+# Note: following code won't be execute for ever
+# user can copy following to Makefile and modify it
+# to fit across compile for different system
+#
+ifeq (TRUE,	FALSE)
+REDEF_TOOLS	= TRUE
+	...
+	CC		= xx-cpu-gcc
+	...
+endif
+#
+# end
+#
+
+# 
+# use default tool chain
+#
+ifneq (TRUE, $(findstring TRUE, $(REDEF_TOOLS)))
+	# GNU tools
+	CC		= gcc
+	CXX		= g++
+	AR     	= ar crub
+	LD     	= ld
+	RAN		= ranlib
+	STRIP	= strip
+
+	# Options 
+	CFLAGS  += -Wall
+	LDFLAGS += 
+	LIBS    +=
+endif
+
+# host tools
+CHMOD		?= chmod
+SED			?= sed 
+RM			?= rm -f
+CP			?= cp 
+
+# 
+# insert user flags 
+#
+CSPSRC_SPEC?= ../cspsrc
+CSP_MAPLIST = $(CSPSRC_SPEC)/.csp_maplist
+
+CFLAGS     += $(USR_CFLAGS)
+CFLAGS     += -I$(EYBUILD_BASE)/include 
+ARFLAGS    += crub
+MAKEFILE	= Makefile
+OBJS 		= $(notdir $(patsubst %.cpp,%.o, $(patsubst %.c,%.o,$(SRCS))))
+
+ARCHIVE     = $(ARCHIVE_SPEC)/$(notdir $(patsubst %.cgi,%.a,$(TARGET_FILE)))
+FCGI_TARGET_FILE= $(FCGI_SPEC)/$(notdir $(patsubst %.cgi,%.fcgi,$(TARGET_FILE)))
+
+# 
+# support FastCGI
+#
+ifeq (TRUE, $(findstring TRUE, $(HAVE_FASTCGI)))
+	TARGET	= $(FCGI_TARGET_FILE)
+	CFLAGS	+= -DHAVE_FASTCGI
+	EBLIB   += $(EYBUILD_BASE)/lib/fastcgi/libeybuild.a
+	LIBS	+= $(EBLIB) $(FASTCGI_LIB)
+else
+	TARGET	= $(TARGET_FILE)
+	LIBEYBUILD  ?= $(EYBUILD_BASE)/lib/libeybuild.a
+	EBLIB   += $(LIBEYBUILD)
+	LIBS	+= $(EBLIB)
+endif
+
+
+#
+# MAKE RULES
+#
+.PHONY : default all depend strip
+.SILENT:
+
+# default target 
+default:
+	@$(MAKE_PRE_RULE)
+	@$(MAKE) map
+	@$(MAKE) $(TARGET) 
+	@$(MAKE_POST_RULE)
+	@echo 
+
+# make target 
+$(TARGET): $(OBJS) $(LIBS) $(CSP_MAPLIST)
+	@if [ "$(HAVE_CPLUSPLUS)" = "TRUE" ]; then \
+		echo "Make target $@ (CXX=$(CXX)) ..."; \
+		$(CXX) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJS) $(LIBS); \
+	else \
+		echo "Make target $@ (CC=$(CC)) ..."; \
+		$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS); \
+	fi
+
+	@echo Make $@ OK!
+
+# make all
+all:
+	@$(MAKE_PRE_RULE)
+	@$(MAKE) map
+	@$(MAKE) depend
+	@$(MAKE) $(TARGET) 
+	@$(MAKE_POST_RULE)
+	@echo 
+
+# make archive
+$(ARCHIVE): $(OBJS) $(EBLIB)
+	@echo Make target $@ ...
+	@cp $(EBLIB) $@
+	@$(AR) -r $@ $(filter-out $(FILTER_LIST), $(OBJS))
+	@echo Make $@ OK!
+
+ar: 
+	@$(MAKE) map
+	@$(MAKE) $(ARCHIVE)
+	
+arall: 
+	@$(MAKE) map
+	@$(MAKE) depend
+	@$(MAKE) $(ARCHIVE)
+
+strip:
+	@echo strip symbles ...	
+	@$(STRIP) -s $(TARGET)
+	
+
+# make dependence
+-include .depend 
+
+depend:
+	@$(MAKE) .depend
+	
+.depend::
+	@echo Checking dependence...
+	-@$(RM) $@
+	-@for file in `echo $(SRCS) | $(SED) 's/[^ ]*\.s//g'` ; \
+	do ( \
+		basename $$file | $(SED) 's/\.cpp/.o: /' | $(SED) 's/\.c/.o: /' >> $@ ; \
+		$(CC) -MM $(CFLAGS) -c $$file >> $@ ; \
+		if [ "$(CC)" = "gcc" ]; then \
+			echo "	@echo \"Compile $$<...\"" >> $@ ; \
+		else \
+			echo "	@echo \"(CC=$(CC)) Compile $$<...\"" >> $@ ; \
+		fi; \
+		echo "	$(CC) $(CFLAGS) -c $$file" >>$@ ; \
+	) done
+	@echo
+
+# domap
+remap:
+	$(MAKE) mapclean
+	$(MAKE) map
+		
+HAVE_CPLUSPLUS ?= FALSE 
+HAVE_CSP_COMPR ?= FALSE 
+HAVE_ROM_COMPR ?= FALSE 
+
+map:
+	@if [ -f "./domap.unix" ];   then \
+		$(CHMOD) +x domap.unix; \
+		./domap.unix $(PWD) $(HAVE_CPLUSPLUS) $(HAVE_CSP_COMPR) $(HAVE_ROM_COMPR);	\
+	 else \
+	 	$(EYBUILD_BASE)/bin/domap.unix $(PWD) $(HAVE_CPLUSPLUS) $(HAVE_CSP_COMPR) $(HAVE_ROM_COMPR); \
+	 fi
+
+# clean targets 
+mapclean:
+		$(RM) $(CSPSRC_SPEC)/.csp_maplist; \
+		$(RM) $(CSPSRC_SPEC)/.rom_maplist; \
+		$(RM) $(CSPSRC_SPEC)/csp_maplist.h; \
+		$(RM) $(CSPSRC_SPEC)/csp_maplist.c*; \
+		$(RM) $(CSPSRC_SPEC)/rom_maplist.h; \
+		$(RM) $(CSPSRC_SPEC)/rom_maplist.c*; \
+		$(RM) -r $(CSPSRC_SPEC)/csp_p; \
+
+clean:
+	@echo clean target files...
+	@$(RM) *.o .depend 
+	@$(RM) $(TARGET) $(ARCHIVE)
+	$(MAKE) mapclean
+

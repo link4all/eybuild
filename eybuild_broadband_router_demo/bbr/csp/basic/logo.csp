@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+<TITLE>Logo</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE type=text/css>
+A.tp:visited {
+	COLOR: #ffffff; TEXT-DECORATION: none; underline: none
+}
+A.tp:hover {
+	COLOR: #ff4000; TEXT-DECORATION: none
+}
+A.tp:link {
+	COLOR: #ffffff; TEXT-DECORATION: none; underline: none
+}
+.font {
+	COLOR: #ffffff; FONT-FAMILY: "Times New Roman", "宋体"; FONT-SIZE: 12px
+}
+</STYLE>
+</HEAD>
+<BODY leftMargin=0 topMargin=0>
+<TABLE border=0 cellPadding=0 cellSpacing=0 class=font width=133>
+  <TBODY>
+    <TR>
+      <TD align=left bgColor=#0052a4 height=59 vAlign=top width=133><IMG border=0 height=59 src="<% =romPrefix(NULL) %>/rom/logo.jpg" width=133> </TD>
+    </TR>
+    <TR>
+      <TD bgColor=#173a7e height=3 width=133></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</BODY>
+</HTML>

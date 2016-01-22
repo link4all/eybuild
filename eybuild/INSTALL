@@ -1,0 +1,45 @@
+INSTALL:
+
+1) Login with root account, change to directory "/usr/local/":
+   cd /usr/local/
+
+2) Uncompress eybuild-cpu-x.x.x.tar.gz:
+   tar -xzf eybuild-x86-1.1.2.tar.gz
+   
+3) Change files access permissions:
+   chown root:root eybuild -R
+   chmod 755 eybuild -R 
+   chmod 777 eybuild/csp_prj/
+   
+4) Make symbol link:
+   ln -fs /usr/local/eybuild/bin/cspengine /usr/bin/cspengine
+   
+5) Logout and login, with another account.
+
+6) Edit your shell profile, e.g. .bash_profile, add following:
+   export EYBUILD_BASE=/usr/local/eybuild
+   export PATH=$PATH:$EYBUILD_BASE/bin
+   
+7) Logout and login again.
+
+
+TEST SAMPLE:
+
+1) Login
+
+2) Copy sample project to local directory:
+   cp -r $EYBUILD_BASE/project/ ~ 
+
+3) Build projects:
+   cd ~/project/
+   make clean all
+   cd
+   
+4) Execute samples:
+   ~/project/raw/unix/raw.cgi
+   ~/project/demo/unix/demo.cgi
+   ~/project/review/unix/review.cgi
+   ~/project/test/unix/test.cgi
+   ~/project/cplus/unix/cplus.cgi
+   cd
+

@@ -1,0 +1,239 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	int 				i;
+		
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		char		dest_ip[16];
+		char		mask[16];
+		char		gateway[16];
+		char		enable[16];
+
+	    for (i=0; i<MAX_STATIC_ROUTER_NUM; i++) {
+	    	sprintf(dest_ip, "ip%d", i);
+	    	sprintf(mask, "mask%d", i);
+	    	sprintf(gateway, "gateway%d", i);
+	    	sprintf(enable, "enable%d", i);
+	    	
+			BUFCPY(bbr->static_route[i].dest_ip, G(dest_ip));
+			BUFCPY(bbr->static_route[i].mask, G(mask));
+			BUFCPY(bbr->static_route[i].gateway, G(gateway));
+			bbr->static_route[i].enable = atoi(G(enable));
+		}
+		
+		save_bbr(bbr, errmsg);
+	} 
+%>
+
+<HTML>
+<HEAD>
+<TITLE>Static Routing</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function doClear(){
+	for(var i = 0; i < 8*4; i += 4){
+		document.forms[0].elements[i].value = "";
+		document.forms[0].elements[i+1].value = "";
+		document.forms[0].elements[i+2].value = "";
+		document.forms[0].elements[i+3].value = "";
+		document.forms[0].elements[i+4].checked = 0;
+	}
+}
+function doSubmit(){
+	for(var i = 0; i < 8*4; i += 4){
+		var ip = document.forms[0].elements[i];
+		var mask = document.forms[0].elements[i+1];
+		var gateway = document.forms[0].elements[i+2];
+		var enable = document.forms[0].elements[i+3];
+		if(ip.value != ""){
+			if(!is_ipaddr(ip.value)){
+				var element = ip;
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}
+		}else{
+			if(mask.value != "" || gateway.value != ""){
+				alert("请输入目的IP地址！");
+				var element = ip;
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}else{
+				enable.checked = false;
+			}		
+		}
+		if(mask.value != ""){
+			if(!is_maskaddr(mask.value)){
+				var element = mask;
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}
+		}else{
+			if(ip.value != "" || gateway.value != ""){
+				alert("请输入子网掩码（例如255.255.255.0）！");
+				var element = mask;
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}else{
+				enable.checked = false;
+			}		
+		}		
+		if(gateway.value != ""){
+			if(!is_gatewayaddr(gateway.value)){
+				var element = gateway;
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}
+		}else{
+			if(mask.value != "" || ip.value != ""){
+				alert("请输入网关！");
+				var element = gateway;
+				if(element){
+					element.focus();
+					element.select();
+				}
+				return false;
+			}else{
+				enable.checked = false;
+			}		
+		}
+	}
+	for(var i = 0; i < 8*4; i += 4){
+		var ip_1 = document.forms[0].elements[i];
+		var mask_1 = document.forms[0].elements[i+1];
+		var gateway_1 = document.forms[0].elements[i+2];
+		for(var j = i + 4; j < 32; j += 4){
+			var ip_2 = document.forms[0].elements[j];
+			var mask_2 = document.forms[0].elements[j+1];
+			var gateway_2 = document.forms[0].elements[j+2];		
+			if(ip_1.value != "" && 
+				ip_1.value == ip_2.value && 
+				mask_1.value == mask_2.value &&
+				gateway_1.value == gateway_2.value){
+					alert(" 不能有相同的路由项，请重新输入！");
+					var element = ip_2;
+					if(element){
+					element.focus();
+					element.select();
+					}
+					return false;
+			}
+		}
+	}
+	return true;
+}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD align=left class=title vAlign=center width=495>静态路由表</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置路由器的静态路由信息。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=410>
+                      <TBODY>
+                        <TR>
+                          <TD width=13><DIV align=center>ID</DIV></TD>
+                          <TD width=115><DIV align=center>目的IP地址</DIV></TD>
+                          <TD width=112><DIV align=center>子网掩码</DIV></TD>
+                          <TD width=110><DIV align=center>网关</DIV></TD>
+                          <TD width=24><DIV align=center>启用</DIV></TD>
+                        </TR>
+					  <% for (i=0; i<MAX_SPECIAL_APP_NUM; i++) { %>
+                        <TR>
+                          <TD><DIV align=center><% =$i+1 %></DIV></TD>
+                          <TD><DIV align=center>
+                              <INPUT class=text id=ip<% =$i %> maxLength=15 name=ip<% =$i %> size=15
+                              value="<% =bbr->static_route[i].dest_ip %>">
+                            </DIV></TD>
+                          <TD><DIV align=center>
+                              <INPUT class=text id=mask<% =$i %> maxLength=15 name=mask<% =$i %> size=15
+                              value="<% =bbr->static_route[i].mask %>">
+                            </DIV></TD>
+                          <TD><DIV align=center>
+                              <INPUT class=text id=gateway<% =$i %> maxLength=15 name=gateway<% =$i %> size=15
+                              value="<% =bbr->static_route[i].gateway %>">
+                            </DIV></TD>
+                          <TD><DIV align=center>
+                              <INPUT id=enable<% =$i %> name=enable<% =$i %> type=checkbox value=2
+                              <% =bbr->static_route[i].enable ? "checked": "" %>>
+                            </DIV></TD>
+                        </TR>
+ 					 <% } %>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Clear name=Clear onclick=doClear(); type=button value="清 空">
+&nbsp;
+                    <INPUT class=button id=Submit name=Save type=submit value="保 存">
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+      width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

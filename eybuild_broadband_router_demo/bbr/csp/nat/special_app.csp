@@ -1,0 +1,317 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	char				protocol[16];
+	char  				enable[16];
+	int 				i;
+		
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+	    char 		pt[16]  = "";
+	    char 		opt[16] = "";
+					  		
+	    for (i=0; i<MAX_SPECIAL_APP_NUM; i++) {
+		    sprintf(pt, "pt%d", i);
+		    sprintf(protocol, "pr%d", i);
+			sprintf(opt, "oPt%d", i);
+		    sprintf(enable, "enable%d", i);
+		    
+			bbr->special_app[i].trigger_port = atoi(G(pt));
+			BUFCPY(bbr->special_app[i].trigger_protocol, G(protocol));
+			BUFCPY(bbr->special_app[i].port_list, G(opt));
+		    sprintf(protocol, "oPr%d", i);
+			BUFCPY(bbr->special_app[i].protocol, G(protocol));
+			bbr->special_app[i].enable = atoi(G(enable));
+		}
+		
+		save_bbr(bbr, errmsg);
+	} 
+%>
+
+<HTML>
+<HEAD>
+<TITLE>spprogram</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function lastipverify(lastip,nMin,nMax){
+var c;
+var n = 0;
+var ch = "0123456789";
+if(lastip.length = 0)
+return false;
+for (var i = 0; i < lastip.length; i++){
+c = lastip.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(lastip) < nMin || parseInt(lastip) > nMax)
+return false; return true;}
+function is_lastip(lastip_string,nMin,nMax){
+if(lastip_string.length == 0){
+alert("请输入IP地址（" + nMin + "－" + nMax + "）！");
+return false;}
+if (!lastipverify(lastip_string,nMin,nMax)){
+alert("IP地址输入错误，请重新输入（"+ nMin + "－" + nMax + "）！");
+return false;}
+return true;}
+function macverify(mac_string){
+var c;
+var n = 0;
+var ch = "-0123456789ABCDEFabcdef";
+if (mac_string.length != 17)
+return false;
+for (var i = 0; i < mac_string.length; i++){
+c = mac_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;
+else{
+if (c == '-')
+n++;}}
+if (n != 5)
+return false;
+for(var i = 2; i < 17; i += 3){
+if (mac_string.charAt(i) != '-')
+return false;
+}return true;}
+function is_macaddr(mac_string){
+if(mac_string.length == 0){
+alert("请输入MAC地址！");
+return false;}
+if (!macverify(mac_string)){
+alert("MAC地址输入错误，请重新输入！");
+return false;}return true;}
+function portverify(port_string){
+var c;
+var ch = "0123456789";
+if(port_string.length == 0)
+return false;
+for (var i = 0; i < port_string.length; i++){
+c = port_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(port_string) <= 0 || parseInt(port_string) >= 65535)
+return false;return true;}
+function is_port(port_string){
+if(port_string.length == 0){
+alert("请输入端口地址（1－65534）！");
+return false;}
+if (!portverify(port_string)){
+alert("端口地址输入错误，请重新输入（1－65534）！");
+return false;}
+return true;}
+function is_number(num_string,nMin,nMax){
+var c;
+var ch = "0123456789";
+for (var i = 0; i < num_string.length; i++){
+c = num_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if(parseInt(num_string) < nMin || parseInt(num_string) > nMax)
+return false;return true;}
+function is_domain(domain_string){
+var c;
+var ch = "-.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+for (var i = 0; i < domain_string.length; i++){
+c = domain_string.charAt(i);
+if (ch.indexOf(c) == -1){
+alert("输入中含有非法字符，请重新输入！");
+return false;}}return true;}
+function is_port(ch,port_string){
+var c;
+for (var i = 0; i < port_string.length; i++){
+c = port_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}return true;}
+function doSubmit(){
+for(i=0;i<8;i++)
+{var element;
+var cnt, ptstr, c;
+element=document.forms[0].elements[i*5+2]; ptstr=element.value; cnt=0
+for(var j=0;j<ptstr.length;j++){
+if (ptstr.charAt(j)==',') cnt++;}
+if (cnt>4){element.focus();element.select();alert("只能输入5个开放端口号段！");return false;}
+if(document.forms[0].elements[i*5+4].checked==true)
+{element=document.forms[0].elements[i*5];
+if(element.value=="")
+{element.focus();element.select();alert("请输入触发端口号！");return false;}
+element=document.forms[0].elements[i*5+2];
+if(element.value=="")
+{element.focus();element.select();alert("请输入开放端口号！");return false;}}}
+var ch1 = "0123456789";
+var ch2 = "-,0123456789";
+for(var i = 0; i < 40; i += 5){
+if(!is_port(ch1,document.forms[0].elements[i].value)){
+alert("端口输入中含有非法字符，请重新输入！");
+var element = document.forms[0].elements[i];
+if(element){element.focus();element.select();}return false;}
+if(!is_port(ch2,document.forms[0].elements[i+2].value)){
+alert("端口输入中含有非法字符，请重新输入！");
+var element = document.forms[0].elements[i+2];
+if(element){element.focus();
+element.select();}return false;}}
+return true;}
+function doClear(){
+for(var i = 0; i < 40; i += 5){
+document.forms[0].elements[i].value = "";
+document.forms[0].elements[i+1].selectedIndex = 0;
+document.forms[0].elements[i+2].value = "";
+document.forms[0].elements[i+3].selectedIndex = 0;
+document.forms[0].elements[i+4].checked = false;}}
+function planet(iPort,oPort){this.iPort=iPort;this.oPort=oPort;}
+function doLoad(){lis = new Array(9);
+lis[0] = new planet("6112","6112");
+lis[1] = new planet("7175","51200-51201,51210");
+lis[2] = new planet("2019","2000-2038,2050-2051,2069,2085,3010-3030");
+lis[3] = new planet("47624","2300-2400,28800-29000");
+lis[4] = new planet("12053","12120,12122,24150-24220");
+lis[5] = new planet("554","6970-6999");
+lis[6] = new planet("47624","2300-2400,28800-29000");
+lis[7] = new planet("47624","2300-2400");
+lis[8] = new planet("47624","2300-2400");}
+function doFill(){
+var destIndex;var srcIndex;
+srcIndex=document.forms[0].app.selectedIndex;
+if(srcIndex==0) return;
+destIndex=document.forms[0].ids.value;
+document.forms[0].elements[5*destIndex].value=lis[srcIndex-1].iPort;
+document.forms[0].elements[5*destIndex+2].value=lis[srcIndex-1].oPort;
+document.forms[0].elements[5*destIndex+4].checked=true;}
+//--></SCRIPT>
+</HEAD>
+<BODY onload=doLoad();>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD align=left class=title vAlign=center width=495>特殊应用程序</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=480>
+                      <TBODY>
+                        <TR>
+                          <TD>某些特殊的应用，比如视频会议，Internet游戏，网络电话等，可能无法在简单的NAT路由器下正常工作。但是，通过本页的正确设置之后，就可以弥补以上的这些缺憾，使得这些应用能够正常工作。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 class=space width=480>
+                      <TBODY>
+                        <TR align=middle>
+                          <TD>ID</TD>
+                          <TD>触发端口</TD>
+                          <TD>触发协议</TD>
+                          <TD>开放端口</TD>
+                          <TD>开放协议</TD>
+                          <TD>启用</TD>
+                        </TR>
+					  <% for (i=0; i<MAX_SPECIAL_APP_NUM; i++) { 
+					  		sprintf(protocol, "pr%d", i);
+					  		sprintf(enable, "enable%d", i);
+					  %>
+                        <TR align=middle>
+                          <TD><% =$i+1 %></TD>
+                          <TD><INPUT class=text maxLength=5 name=pt<% =$i %> size=6
+                              value="<% bbr->special_app[i].trigger_port ? print("%d", bbr->special_app[i].trigger_port) : 0; %>">
+                          </TD>
+                          <TD>
+                          <% SELECT_BEGIN(protocol, bbr->special_app[i].trigger_protocol, "class=list") %>
+                              <% OPTIONS_ADD("1", "ALL") %>
+                              <% OPTIONS_ADD("2", "TCP") %>
+                              <% OPTIONS_ADD("3", "UDP") %>
+                          <% SELECT_END() %>
+						  </TD>
+                          <TD><INPUT class=text maxLength=59 name=oPt<% =$i %> size=40
+                              value="<% =bbr->special_app[i].port_list %>">
+                          </TD>
+                          <TD>
+                          <% 
+ 					  		sprintf(protocol, "oPr%d", i);
+                            SELECT_BEGIN(protocol, bbr->special_app[i].protocol, "class=list") %>
+                              <% OPTIONS_ADD("1", "ALL") %>
+                              <% OPTIONS_ADD("2", "TCP") %>
+                              <% OPTIONS_ADD("3", "UDP") %>
+                          <% SELECT_END() %>
+						  </TD>
+                          <TD><% CHECK_BOX2(enable, "1", bbr->special_app[i].enable, ""); %></TD>
+                        </TR>
+ 					 <% } %>
+                     </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 class=space width=480>
+                      <TBODY>
+                        <TR>
+                          <TD width=112>常用应用程序：</TD>
+                          <TD noWrap width=117>
+                          <% SELECT_BEGIN("app", "", "class=list") %>
+                              <% OPTIONS_ADD("0", "- - - 选项 - - -") %>
+                              <% OPTIONS_ADD("1", "Battle.net") %>
+                              <% OPTIONS_ADD("2", "Dialpad") %>
+                              <% OPTIONS_ADD("3", "ICU II") %>
+                              <% OPTIONS_ADD("4", "MSN Gaming Zone") %>
+                              <% OPTIONS_ADD("5", "PC-to-Phone") %>
+                              <% OPTIONS_ADD("6", "Quick Time 4") %>
+                              <% OPTIONS_ADD("7", "AOE II Client") %>
+                              <% OPTIONS_ADD("8", "Sudden Strike") %>
+                              <% OPTIONS_ADD("9", "Baldurs Gate II") %>
+                          <% SELECT_END() %>
+						  </TD>
+                          <TD noWrap width=82><INPUT class=button name=fill onclick=doFill(); type=button value=填空到>
+&nbsp;ID</TD>
+                          <TD noWrap width=108>
+                          <SELECT class=list name=ids>
+                              <OPTION selected value=0>1</OPTION>
+                              <OPTION value=1>2</OPTION>
+                              <OPTION value=2>3</OPTION>
+                              <OPTION value=3>4</OPTION>
+                              <OPTION value=4>5</OPTION>
+                              <OPTION value=5>6</OPTION>
+                              <OPTION value=6>7</OPTION>
+                              <OPTION value=7>8</OPTION>
+                            </SELECT></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button name=Save type=submit value="保 存">
+&nbsp;
+                    <INPUT class=button name=clear onclick=doClear(); type=button value="清 空">
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

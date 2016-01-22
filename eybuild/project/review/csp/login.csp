@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>留言本--登录</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<STYLE>P {
+	size: 6pt
+}
+.title {
+	COLOR: #ffb6c1
+}
+</STYLE>
+<% {{
+	@include <login.h>
+	extern int review_count;
+	char		errmsg[128] = "Login error";
+	
+	/* login OK */
+	if (do_login(errmsg) >= 0)
+		return OK;
+%>
+</HEAD>
+<BODY>
+<P>
+<SPAN class=title>
+	<CENTER>
+	<H1>留 言 本</H1> [FastCGI 访问计数: <% =$++review_count %>]
+</CENTER>
+</SPAN>
+<FORM action=<% =cgiPrefix2(NULL, "/review/login.csp") %> method=post>
+	<CENTER>
+	<P>姓名： <INPUT type=text name=usrname size=16> 
+	<P>口令： <INPUT type=password name=passwd size=16> 
+	<P><INPUT type=submit name=login value="提 交"> 
+	</CENTER>
+</FORM>
+<CENTER>
+<% if ('\0' != errmsg[0]) { %>
+<font color=red><% =errmsg %></font>
+<% } %>
+</CENTER>
+<% }} %>
+</BODY>
+</HTML>

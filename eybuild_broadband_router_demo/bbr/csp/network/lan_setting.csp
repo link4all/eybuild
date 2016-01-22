@@ -1,0 +1,142 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+		BUFCPY(bbr->lan.ip, G("lanip"));
+		BUFCPY(bbr->lan.ipmask, G("lanmask"));
+		
+		save_bbr(bbr, errmsg);
+	}	
+%>
+
+<HTML>
+<HEAD>
+<TITLE>netcfg</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content=no-cache http-equiv=pragma>
+<META content="wed, 26 Feb 1997 08:21:57 GMT" http-equiv=expires>
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" rel=stylesheet type=text/css>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+var oldIp;var oldMsk;
+
+function doLoad(){oldIp = document.forms[0].lanip.value; oldMsk=document.forms[0].lanmask.value}
+function doSubmit(){
+	if(document.forms[0].lanip.value!=oldIp || document.forms[0].lanmask.value!=oldMsk)	{
+		if(!confirm("LAN口IP地址的更改将导致路由器的重新启动，确定？"))
+		{return false;}
+	}
+	if(!is_ipaddr(document.forms[0].lanip.value)) {
+		var element =document.forms[0].lanip;
+		if(element){
+			element.focus();element.select();
+		}
+		
+		return false;
+	}
+	if(!is_maskaddr(document.forms[0].lanmask.value)) {
+		var element =document.forms[0].lanmask;
+		if(element){element.focus();element.select();}
+		return false;
+	}
+	if(document.forms[0].lanip.value!=oldIp) {
+		parent.topLeftFrame.address = document.forms[0].lanip.value;
+		parent.topLeftFrame.LoadNewIp();
+	}
+	return true;
+}
+//--></SCRIPT>
+</HEAD>
+<BODY onload=doLoad();>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+    width=7></TD>
+          <TD align=left class=title vAlign=center width=495>LAN口设置</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE border=0 cellPadding=0 cellSpacing=0 width=502>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置路由器LAN口的基本网络参数。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 class=space width=400>
+                      <TBODY>
+                        <TR>
+                          <TD width=70>MAC地址：</TD>
+                          <TD width=230>00-0A-EB-B2-6B-D8</TD>
+                        </TR>
+                        <TR>
+                          <TD>IP地址：</TD>
+                          <TD><INPUT class=text id=lanip maxLength=15 name=lanip size=15 
+                  value=<% =bbr->lan.ip %>></TD>
+                        </TR>
+                        <TR>
+                          <TD vAlign=bottom>子网掩码：</TD>
+                          <TD>
+                          <% SELECT_BEGIN("lanmask", bbr->lan.ipmask, "class=list id=lanmask") %>
+                              <% OPTIONS_ADD("255.255.255.0", "255.255.255.0") %>
+                              <% OPTIONS_ADD("255.255.0.0", "255.255.0.0") %>
+                          <% SELECT_END() %>
+                          </TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE align=center border=0 cellPadding=0 cellSpacing=0 class=space 
+            width=400>
+                      <TBODY>
+                        <TR>
+                          <TD>注意：当LAN口IP参数（包括IP地址、子网掩码）发生变更时，为确保DHCP server能够正常工作，应保证DHCP server中设置的地址池、静态地址与新的LAN口IP是处于同一网段的，并请重启路由器。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <BR></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30><DIV align=left>&nbsp;&nbsp;
+                      <INPUT class=button id="保 存" name=Save type=submit value="保 存">
+&nbsp;&nbsp;&nbsp;</DIV></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+          width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META content=no-cache http-equiv=pragma>
+</BODY>
+</HTML>

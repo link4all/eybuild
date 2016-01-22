@@ -1,0 +1,272 @@
+<% @b 
+	@include <webhandle.h>
+	BROADBAND_ROUTER 	bbr[1];
+	char				errmsg[256] = "";
+	int 				offset = 0;
+	int 				ncurpage = 0;
+	int 				max_count = 0;
+	int 				i;
+	
+	/* load first */
+	load_bbr(bbr, errmsg);
+	
+	ncurpage = atoi(G("curpage"));
+	offset = ncurpage * 8;
+	max_count = MAX_DHCP_STATIC_HOST_NUM;
+	
+	/* save user submit */
+	if (!isblankstr(G("Save"))) {
+	    char 		mac[8];
+	    char 		ip[8];
+	    
+	    for (i=offset; i<offset+8; i++) {
+		    sprintf(mac, "mac%d", i);
+		    sprintf(ip, "ip%d", i);
+		    
+			BUFCPY(bbr->static_dhcps[i].mac, G(mac));
+			BUFCPY(bbr->static_dhcps[i].ip, G(ip));
+		}
+		
+		save_bbr(bbr, errmsg);
+	} else if (!isblankstr(G("PrevPage"))) {
+		if (ncurpage > 0)
+			offset = --ncurpage * 8;
+	} else if (!isblankstr(G("NextPage"))) {
+		if ((ncurpage+1)*8 < max_count)
+			offset = ++ncurpage * 8;
+    }	
+%>
+
+<HTML>
+<HEAD>
+<TITLE>staticaddr</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+function lastipverify(lastip,nMin,nMax){
+var c;
+var n = 0;
+var ch = "0123456789";
+if(lastip.length = 0)
+return false;
+for (var i = 0; i < lastip.length; i++){
+c = lastip.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(lastip) < nMin || parseInt(lastip) > nMax)
+return false; return true;}
+function is_lastip(lastip_string,nMin,nMax){
+if(lastip_string.length == 0){
+alert("请输入IP地址（" + nMin + "－" + nMax + "）！");
+return false;}
+if (!lastipverify(lastip_string,nMin,nMax)){
+alert("IP地址输入错误，请重新输入（"+ nMin + "－" + nMax + "）！");
+return false;}
+return true;}
+function macverify(mac_string){
+var c;
+var n = 0;
+var ch = "-0123456789ABCDEFabcdef";
+if (mac_string.length != 17)
+return false;
+for (var i = 0; i < mac_string.length; i++){
+c = mac_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;
+else{
+if (c == '-')
+n++;}}
+if (n != 5)
+return false;
+for(var i = 2; i < 17; i += 3){
+if (mac_string.charAt(i) != '-')
+return false;
+}return true;}
+function is_macaddr(mac_string){
+if(mac_string.length == 0){
+alert("请输入MAC地址！");
+return false;}
+if (!macverify(mac_string)){
+alert("MAC地址输入错误，请重新输入！");
+return false;}return true;}
+function portverify(port_string){
+var c;
+var ch = "0123456789";
+if(port_string.length == 0)
+return false;
+for (var i = 0; i < port_string.length; i++){
+c = port_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if (parseInt(port_string) <= 0 || parseInt(port_string) >= 65535)
+return false;return true;}
+function is_port(port_string){
+if(port_string.length == 0){
+alert("请输入端口地址（1－65534）！");
+return false;}
+if (!portverify(port_string)){
+alert("端口地址输入错误，请重新输入（1－65534）！");
+return false;}
+return true;}
+function is_number(num_string,nMin,nMax){
+var c;
+var ch = "0123456789";
+for (var i = 0; i < num_string.length; i++){
+c = num_string.charAt(i);
+if (ch.indexOf(c) == -1)
+return false;}
+if(parseInt(num_string) < nMin || parseInt(num_string) > nMax)
+return false;return true;}
+function is_domain(domain_string){
+var c;
+var ch = "-.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+for (var i = 0; i < domain_string.length; i++){
+c = domain_string.charAt(i);
+if (ch.indexOf(c) == -1){
+alert("输入中含有非法字符，请重新输入！");
+return false;}}return true;}
+function is_spmac(mac_string){
+if(mac_string == "00-00-00-00-00-00"){
+alert("无效MAC地址，请重新输入！");
+return false;}
+var ch = "Ff-";
+for (var i = 0; i < mac_string.length; i++){
+c = mac_string.charAt(i);
+if(ch.indexOf(c) == -1)
+return true;}
+alert("无效MAC地址，请重新输入！");
+return false;}
+function doSubmit(){
+var i = 0;
+for(i = 0; i < 16; i += 2){
+if(document.forms[0].elements[i+1].value != ""){
+if(!is_macaddr(document.forms[0].elements[i].value)){	
+var element =document.forms[0].elements[i];
+if(element){element.focus();element.select();}
+return false;}
+if(!is_spmac(document.forms[0].elements[i].value)){
+var element =document.forms[0].elements[i];
+if(element){element.focus();element.select();}
+return false;}}
+if(document.forms[0].elements[i].value != ""){
+if(!is_ipaddr(document.forms[0].elements[i+1].value)){
+var element =document.forms[0].elements[i+1];
+if(element){element.focus();element.select();}
+return false;}}}
+var current,j;
+for(i = 0; i < 16; i += 2){	
+var current = document.forms[0].elements[i].value;
+for(j = i+2; j < 16; j += 2){
+if(current != "" && current == document.forms[0].elements[j].value){
+alert("不能有相同的MAC地址，请重新输入！");
+var element = document.forms[0].elements[j];
+if(element){element.focus();element.select();}
+return false;}}}
+for(i = 0; i < 16; i += 2){
+current = document.forms[0].elements[i+1].value;
+for(j = i+2; j < 16; j += 2){
+if(current != "" && current == document.forms[0].elements[j+1].value){
+alert("不能有相同的IP地址，请重新输入！");
+var element = document.forms[0].elements[j+1];
+if(element){element.focus();element.select();}
+return false;}}}
+alert("注意：只有在您重启路由器后，您所做的修改才能生效！");
+return true;}
+function doPrev(){
+var ncurpage=document.forms[0].curpage.value;
+window.location.href="<% =thisCgiPrefix() %>PrevPage=255&curpage=" + ncurpage;}
+function doNext(){
+var ncurpage=document.forms[0].curpage.value;
+window.location.href="<% =thisCgiPrefix() %>NextPage=255&curpage=" + ncurpage;}
+<% #if 0 %>
+<% #endif %>
+function doClear(){
+for(var i = 0; i < 16; i += 2){
+document.forms[0].elements[i].value = "";
+document.forms[0].elements[i+1].value = "";}}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 src="<% =romPrefix(NULL) %>/rom/arc.gif" 
+      width=7></TD>
+          <TD class=title vAlign=center align=left width=495>静态地址分配</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE class=space cellSpacing=0 cellPadding=0 width=380 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>本页设置DHCP服务器的静态地址分配功能。通过此项功能，您可以更好地对局域网中的计算机进行管理和监控。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space width=420 align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD align=middle width=24>ID</TD>
+                          <TD align=middle width=215>MAC地址</TD>
+                          <TD align=middle width=139>IP地址</TD>
+                          <TD>&nbsp;</TD>
+                        </TR>
+					  <% for (i=offset; i<offset+8; i++) { %>
+                        <TR>
+                          <TD align=middle><% =$i+1 %></TD>
+                          <TD align=middle><INPUT class=text id=mac<% =$i+1 %> maxLength=17 
+                  size=18 name=mac<% =$i %> value="<% =bbr->static_dhcps[i].mac %>"></TD>
+                          <TD align=middle><INPUT class=text maxLength=15 size=15 name=ip<% =$i %> 
+                            value="<% =bbr->static_dhcps[i].ip %>"></TD>
+                          <TD align=middle>&nbsp;</TD>
+                        </TR>
+					  <% } %>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=PrevPage <% =offset<=0 ? "disabled": "" %>  onclick=doPrev(); type=button value=上一页 name=PrevPage>
+&nbsp;
+                    <INPUT class=button id=NextPage <% =offset+8>=max_count-1 ? "disabled": "" %> onclick=doNext(); type=button value=下一页 name=NextPage>
+&nbsp;
+                    <INPUT class=button id=Clear onclick=doClear(); type=button value="清 空" name=Clear>
+&nbsp;
+                    <INPUT class=button id=Submit type=submit value="保 存" name=Save>
+&nbsp; </TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+            width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <INPUT type=hidden value="<% =$ncurpage %>" name=curpage>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

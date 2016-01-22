@@ -1,0 +1,117 @@
+<% @include <webhandle.h> %>
+<HTML>
+<HEAD>
+<TITLE>update</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=pragma content=no-cache>
+<META http-equiv=expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK 
+href="<% =romPrefix(NULL) %>/rom/bbr.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript src="<% =romPrefix(NULL) %>/rom/commonfuncs1.js" 
+type=text/JavaScript><!--
+//--></SCRIPT>
+<SCRIPT language=JavaScript><!-- 
+if(window.parent == window){window.location.href="<% =getScriptName() %>";}
+function Click(){ window.event.returnValue=false;}
+document.oncontextmenu=Click;
+var bClick=false;
+function doSubmit(){
+if(bClick==true)
+return false;
+if(document.forms[0].filename.value != ""){
+if(!charCompare(document.forms[0].filename.value,20,0)){	
+alert("文件名中含有非法字符，请重新输入！");
+var element =document.forms[0].filename;
+if(element){
+element.focus();element.select();}return false;}}
+else{alert("请输入文件名！");
+var element =document.forms[0].filename;
+if(element){
+element.focus();
+element.select();}
+return false;}
+if(!is_ipaddr(document.forms[0].ip.value)){ 
+var element =document.forms[0].ip;
+if(element){
+element.focus();
+element.select();}
+return false;}
+if(confirm("确认要进行软件升级吗?")){
+bClick=true;return true;}else{return false;}}
+//--></SCRIPT>
+</HEAD>
+<BODY>
+<CENTER>
+  <FORM action="<% =thisCgiPrefix() %>" method=post onsubmit="return doSubmit();">
+    <TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+      <TBODY>
+        <TR>
+          <TD class=title width=7><IMG height=24 
+      src="<% =romPrefix(NULL) %>/rom/arc.gif" width=7></TD>
+          <TD class=title vAlign=center align=left width=495>软件升级</TD>
+        </TR>
+        <TR>
+          <TD colSpan=2><TABLE cellSpacing=0 cellPadding=0 width=502 border=0>
+              <TBODY>
+                <TR>
+                  <TD class=vline rowSpan=15><BR></TD>
+                  <TD width=500><TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD>通过升级本路由器最新版本的软件，将会使您的路由器工作得更加的稳定，甚至获得更新的功能。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD width=105>文 件 名：</TD>
+                          <TD width=295><INPUT class=text id=filename maxLength=20 disabled
+                  value=bbr-v1.02.bin name=filename></TD>
+                        </TR>
+                        <TR>
+                          <TD>TFTP 服务器 IP：</TD>
+                          <TD><INPUT class=text id=ip maxLength=15 disabled value="" name=ip></TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                    <TABLE class=space cellSpacing=0 cellPadding=0 width=400 
+            align=center border=0>
+                      <TBODY>
+                        <TR>
+                          <TD height=50>当前软件版本：<% =BBR_VERSION %><BR>
+                            当前硬件版本：V0.1.0</TD>
+                        </TR>
+                        <TR>
+                          <TD>注意：<FONT 
+                  color=red>升级时请选择与当前硬件版本一致的软件。</FONT>升级过程不能关闭路由器电源，否则将导致路由器损坏而无法使用。升级过程约20秒，当升级结束后，路由器将会自动重新启动。</TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE></TD>
+                  <TD class=vline rowSpan=15><BR></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" width=1></TD>
+                </TR>
+                <TR>
+                  <TD class=tail height=30>&nbsp;
+                    <INPUT class=button id=Submit type=submit disabled value="升 级" name=Submit></TD>
+                </TR>
+                <TR>
+                  <TD class=hline><IMG height=1 
+            src="<% =romPrefix(NULL) %>/rom/empty.gif" 
+    width=1></TD>
+                </TR>
+              </TBODY>
+            </TABLE></TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </FORM>
+</CENTER>
+<META http-equiv=pragma content=no-cache>
+</BODY>
+</HTML>

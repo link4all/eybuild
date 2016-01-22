@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>eybuild/CSP demo</title>
+</head>
+<body>
+thispage->name: <% =thispage->name %><br>
+thispage->path: <% =thispage->path %><br>
+thispage->fullname: <% =thispage->fullname %><br>
+<% { static int	num=0; %>
+<p>FastCGI Counter: <% =$++num %></p>
+<% } %>
+
+Hello world. <img src="<% =romPrefix2(NULL, "/img/face.gif") %>">
+<BR>
+<form action="<% =cgiPrefix2(NULL, "/demo/test.csp") %>" method="post">
+    Input: <input type="text" name="inputbox"><p>
+    <input type="submit" name="testit" value="testit"><br>
+</form>
+</body>
+</html>
